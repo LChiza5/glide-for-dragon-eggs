@@ -1,0 +1,9 @@
+# Herramientas fijadas para todo el equipo: mismas versiones en todas las PCs.
+# Instalar con: rokit install
+[tools]
+rojo = "rojo-rbx/rojo@7.7.1"
+wally = "UpliftGames/wally@0.3.2"
+stylua = "JohnnyMorganz/StyLua@2.5.2"
+selene = "Kampfkarren/selene@0.31.0"
+luau-lsp = "JohnnyMorganz/luau-lsp@1.70.1"
+wally-package-types = "JohnnyMorganz/wally-package-types@1.6.2"

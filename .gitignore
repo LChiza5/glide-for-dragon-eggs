@@ -1,0 +1,18 @@
+# Generado por Wally (se recrea con `wally install`)
+/Packages
+/ServerPackages
+/DevPackages
+
+# Generado por Rojo / Luau LSP
+sourcemap.json
+/build
+
+# Archivos de lugar de Studio: binarios, no se pueden mezclar en Git
+*.rbxl
+*.rbxlx
+*.rbxl.lock
+*.rbxlx.lock
+
+# Sistema
+.DS_Store
+Thumbs.db

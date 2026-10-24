@@ -1,0 +1,8 @@
+# Dueños de cada módulo: GitHub les pide revisión automáticamente en los Pull Requests.
+# Cuando Isaac y José tengan su usuario de GitHub, reemplacen los nombres y quiten el "#".
+
+*                                       @LChiza5
+
+# /src/server/Services/GlideService.luau  @usuario-de-isaac
+# /src/client/Controllers/                @usuario-de-isaac
+# /src/client/UI/                         @usuario-de-jose
