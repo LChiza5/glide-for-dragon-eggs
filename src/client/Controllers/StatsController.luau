@@ -15,6 +15,7 @@ local values: { [Types.StatName]: Fusion.Value<number> } = {
 	WingPower = scope:Value(0),
 	Coins = scope:Value(0),
 	Wins = scope:Value(0),
+	BestDistance = scope:Value(0),
 }
 
 local StatsController = {}

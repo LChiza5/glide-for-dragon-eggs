@@ -40,7 +40,7 @@ function DataService.getData(player: Player): Types.PlayerData?
 end
 
 -- Publica los stats visibles como atributos del Player y en la tabla de clasificación.
--- Llamarlo después de cambiar WingPower, Coins o Wins.
+-- Llamarlo después de cambiar WingPower, Coins, Wins o BestDistance.
 function DataService.replicate(player: Player)
 	local data = DataService.getData(player)
 	if data == nil then
@@ -50,6 +50,7 @@ function DataService.replicate(player: Player)
 	player:SetAttribute("WingPower", data.WingPower)
 	player:SetAttribute("Coins", data.Coins)
 	player:SetAttribute("Wins", data.Wins)
+	player:SetAttribute("BestDistance", data.BestDistance)
 
 	local leaderstats = player:FindFirstChild("leaderstats")
 	if leaderstats ~= nil then

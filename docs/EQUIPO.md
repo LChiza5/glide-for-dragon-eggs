@@ -38,6 +38,52 @@ En cada etapa los tres trabajan a la vez, en relevo: el primero deja lista la ba
 | **4 · Lanzamiento suave** (semana 6) | **Isaac:** pruebas con amigos, lista de errores | **José:** pulir primeros 5 minutos y tutorial | **Luis:** analítica (entrar → primer vuelo → primer huevo → renacer) y publicar | **Todos:** primeros anuncios con presupuesto pequeño |
 | **5 · Operación** (cada semana) | **Luis (lun):** revisar métricas y decidir la actualización | **Isaac (mar–jue):** reino, evento o mecánica nueva | **José (mar–jue):** UI, cosméticos, miniatura nueva | **Luis:** vie integrar en Staging · sáb publicar |
 
+## Contratos entre sistemas (Etapa 1)
+
+Lo que Luis deja listo para que Isaac y José lo usen sin tocar el código de datos.
+
+### Para Isaac: pagar un vuelo (`GlideService.rewardDistance`)
+
+```luau
+local GlideService = require(ServerScriptService.Server.Services.GlideService)
+local result = GlideService.rewardDistance(player, studs) -- Types.GlideResult?
+```
+
+1. Llamarla **solo desde el servidor**, al aterrizar, con la distancia que mide el servidor
+   (posición de despegue contra posición de aterrizaje del personaje). Nunca con un número que mande el cliente.
+2. La función se encarga de todo lo demás: descarta valores raros (NaN, cero o negativos), exige
+   `MIN_GLIDE_INTERVAL` segundos entre dos pagos, recorta la distancia a `WingPower × MAX_GLIDE_STUDS_PER_POWER`,
+   suma las monedas, actualiza `BestDistance`, publica los atributos y avisa al cliente.
+3. Devuelve `{ distance, coins, isNewBest }`, o `nil` si no pagó (por ejemplo, por pagar demasiado seguido).
+4. Para probarla sin el mapa, en Play desde el servidor:
+   `require(game.ServerScriptService.Server.Services.GlideService).rewardDistance(game.Players:GetPlayers()[1], 50)`.
+5. Si hace falta otro tope o más monedas por stud, se pide el cambio en `src/shared/Config/Balance.luau`
+   (es de Luis; se avisa antes de tocarlo).
+
+### Para José: leer los datos del jugador
+
+- **Stats reactivos** (Fusion): `StatsController.get(nombre)` devuelve un `Fusion.Value<number>`.
+  Nombres válidos (`Types.StatName`): `"WingPower"`, `"Coins"`, `"Wins"`, `"BestDistance"`.
+
+  ```luau
+  Text = scope:Computed(function(use)
+      return formatNumber(use(StatsController.get("BestDistance")))
+  end)
+  ```
+
+- **Atributos del Player**: son lo mismo, por si algún día hace falta leerlos a mano:
+  `Players.LocalPlayer:GetAttribute("WingPower" | "Coins" | "Wins" | "BestDistance")`.
+- **Pantalla de resultado al aterrizar**: el servidor manda el RemoteEvent `GlideResult` cada vez que paga un vuelo.
+
+  ```luau
+  Remotes.get("GlideResult").OnClientEvent:Connect(function(result: Types.GlideResult)
+      -- result.distance (studs), result.coins, result.isNewBest
+  end)
+  ```
+
+- La tabla de clasificación (`leaderstats`) ya muestra `Power` y `Coins`; no hay que crearla.
+- Los números para mostrar siempre pasan por `formatNumber` (`src/shared/formatNumber.luau`).
+
 ## Metas para saber si vamos bien
 
 - Vuelve al día siguiente (D1): 20 % o más
