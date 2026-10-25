@@ -15,6 +15,7 @@ export type PlayerData = {
 	LastSeen: number, -- os.time() de la última vez que el nido pagó; sirve para las ganancias sin conexión
 	LastDailyDay: number, -- día UTC (os.time() // 86400) en que reclamó la recompensa diaria por última vez; 0 = nunca
 	DailyStreak: number, -- días seguidos reclamados
+	FunnelDone: { [string]: boolean }, -- pasos del embudo de analítica que ya se enviaron (una vez por cuenta)
 	FreeEggs: number, -- huevos gratis comprados con Robux; se gastan antes que las monedas
 	LuckUntil: number, -- os.time() en que termina la poción de suerte; 0 = sin poción
 	StarterPackBought: boolean, -- el paquete inicial solo se vende una vez

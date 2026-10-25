@@ -15,6 +15,7 @@ local Balance = require(ReplicatedStorage.Shared.Config.Balance)
 local DataService = require(script.Parent.DataService)
 local Dragons = require(ReplicatedStorage.Shared.Config.Dragons)
 local Eggs = require(ReplicatedStorage.Shared.Config.Eggs)
+local MetricsService = require(script.Parent.MetricsService)
 local MonetizationService = require(script.Parent.MonetizationService)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Types = require(ReplicatedStorage.Shared.Types)
@@ -197,6 +198,9 @@ function EggService.hatch(player: Player, eggId: string, free: boolean?): Types.
 
 	DataService.replicate(player)
 	replicateInventory(player)
+	MetricsService.reach(player, "FirstEgg")
+	MetricsService.coinsSpent(player, price, "Shop", egg.id)
+	MetricsService.event(player, "Hatch", 1, { rarity = rarity, dragon = dragon.id, price = price })
 	return { ok = true, dragonId = dragon.id, rarity = rarity, isNew = before == nil, coinsSpent = price }
 end
 

@@ -10,6 +10,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Balance = require(ReplicatedStorage.Shared.Config.Balance)
 local DataService = require(script.Parent.DataService)
+local MetricsService = require(script.Parent.MetricsService)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Types = require(ReplicatedStorage.Shared.Types)
 
@@ -63,6 +64,8 @@ function RebirthService.rebirth(player: Player): Types.RebirthResult
 	data.Rebirths += 1
 	DataService.replicate(player)
 	publish(player)
+	MetricsService.reach(player, "FirstRebirth")
+	MetricsService.event(player, "Rebirth", data.Rebirths)
 	return { ok = true, rebirths = data.Rebirths, multiplier = RebirthService.getMultiplier(player) }
 end
 

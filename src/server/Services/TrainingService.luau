@@ -9,6 +9,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Balance = require(ReplicatedStorage.Shared.Config.Balance)
 local DataService = require(script.Parent.DataService)
+local MetricsService = require(script.Parent.MetricsService)
 local MonetizationService = require(script.Parent.MonetizationService)
 local RebirthService = require(script.Parent.RebirthService)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
@@ -28,6 +29,7 @@ local function grantTraining(player: Player)
 	gain *= RebirthService.getMultiplier(player)
 	data.WingPower += gain
 	DataService.replicate(player)
+	MetricsService.reach(player, "FirstTrain")
 end
 
 local function onTrain(player: Player)

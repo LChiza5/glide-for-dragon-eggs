@@ -15,6 +15,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Balance = require(ReplicatedStorage.Shared.Config.Balance)
 local Daily = require(ReplicatedStorage.Shared.Config.Daily)
 local DataService = require(script.Parent.DataService)
+local MetricsService = require(script.Parent.MetricsService)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Types = require(ReplicatedStorage.Shared.Types)
 
@@ -79,6 +80,7 @@ function DailyService.claim(player: Player): Types.DailyResult
 
 	DataService.replicate(player)
 	DailyService.publish(player)
+	MetricsService.coinsGained(player, coins, "TimedReward", "Daily")
 	return { ok = true, coins = coins, streak = streak, day = Daily.dayInCycle(streak) }
 end
 

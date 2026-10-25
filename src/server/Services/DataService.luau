@@ -25,6 +25,7 @@ local TEMPLATE: Types.PlayerData = {
 	LastSeen = 0,
 	LastDailyDay = 0,
 	DailyStreak = 0,
+	FunnelDone = {},
 	FreeEggs = 0,
 	LuckUntil = 0,
 	StarterPackBought = false,
