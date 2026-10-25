@@ -26,6 +26,22 @@ local Balance = {
 	LEADERBOARD_SIZE = 50, -- puestos que se publican
 	LEADERBOARD_REFRESH = 60, -- segundos entre guardar las marcas nuevas y volver a leer el Top
 
+	-- Monetización
+	DOUBLE_POWER_MULTIPLIER = 2, -- pase DoublePower: poder por entrenamiento
+	AUTO_TRAIN_INTERVAL = 1, -- pase AutoTrain: segundos entre entrenamientos automáticos
+	VIP_COIN_MULTIPLIER = 1.25, -- pase Vip: monedas de vuelos y nido
+	EXTRA_DRAGON_SLOTS = 3, -- pase ExtraDragonSlots
+	LUCK_PASS_MULTIPLIER = 2, -- pase DoubleLuck
+	LUCK_POTION_MULTIPLIER = 2, -- poción de suerte; se multiplica con el pase
+	LUCK_POTION_SECONDS = 15 * 60, -- lo que dura cada poción (se suman si compra otra antes de que termine)
+	STARTER_PACK_COINS = 500,
+	STARTER_PACK_EGGS = 3, -- huevos gratis del paquete inicial
+	EGG_PACK_SMALL = 3, -- huevos gratis del paquete chico
+	EGG_PACK_LARGE = 10, -- huevos gratis del paquete grande
+	DOUBLE_OFFLINE_FALLBACK_COINS = 200, -- si compra "duplicar" y ya no hay ganancias que repetir
+	PURCHASE_HISTORY_LIMIT = 200, -- PurchaseIds que se recuerdan para no entregar dos veces
+	PURCHASE_PROMPT_COOLDOWN = 1, -- segundos mínimos entre dos pedidos de compra
+
 	-- Ganancias sin conexión
 	OFFLINE_MIN_SECONDS = 60, -- ausencias más cortas que esto no pagan
 	OFFLINE_MAX_SECONDS = 8 * 60 * 60, -- tope de horas que se pagan

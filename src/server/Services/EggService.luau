@@ -24,6 +24,7 @@ local MAX_ID_LENGTH = 40
 local random = Random.new()
 local lastActionAt: { [Player]: number? } = {}
 local ready: { [Player]: boolean? } = {} -- ya se aplicó lo de la carga (sin conexión, inventario)
+local initializing: { [Player]: boolean? } = {} -- se está aplicando ahora mismo
 
 local EggService = {}
 
@@ -102,7 +103,7 @@ function EggService.getNestRate(player: Player): number
 			end
 		end
 	end
-	return rate
+	return rate * MonetizationService.getCoinMultiplier(player)
 end
 
 -- Deja la carpeta `folderName` del Player con un IntValue por cada id de `counts`.
@@ -153,6 +154,7 @@ local function replicateInventory(player: Player)
 	player:SetAttribute("GlideMultiplier", EggService.getGlideMultiplier(player))
 	player:SetAttribute("NestRate", EggService.getNestRate(player))
 	player:SetAttribute("DragonSlots", slotLimit(player))
+	player:SetAttribute("FreeEggs", data.FreeEggs)
 	syncCounts(player, "Dragons", data.Dragons)
 	syncCounts(player, "EquippedDragons", equippedCounts)
 end
@@ -176,7 +178,9 @@ function EggService.hatch(player: Player, eggId: string, free: boolean?): Types.
 	end
 
 	-- Sin yields entre comprobar las monedas y cobrarlas: dos pedidos seguidos no pueden gastar las mismas monedas.
-	local price = if free == true then 0 else egg.price
+	-- Un huevo gratis comprado con Robux (FreeEggs) se gasta antes que las monedas.
+	local useToken = free ~= true and data.FreeEggs > 0
+	local price = if free == true or useToken then 0 else egg.price
 	if data.Coins < price then
 		return { ok = false, reason = "NotEnoughCoins" }
 	end
@@ -185,6 +189,9 @@ function EggService.hatch(player: Player, eggId: string, free: boolean?): Types.
 	local dragon = EggService.pickDragon(random, rarity)
 
 	data.Coins -= price
+	if useToken then
+		data.FreeEggs -= 1
+	end
 	local before = data.Dragons[dragon.id]
 	data.Dragons[dragon.id] = (before or 0) + 1
 
@@ -266,17 +273,23 @@ function EggService.applyOffline(player: Player)
 	end
 
 	data.Coins += coins
+	MonetizationService.setOfflineClaimable(player, coins)
 	-- Atributos y no RemoteEvent: el cliente puede tardar en conectarse y un evento se perdería; un atributo siempre llega.
 	player:SetAttribute("OfflineCoins", coins)
 	player:SetAttribute("OfflineSeconds", if coins > 0 then seconds else 0)
 end
 
 local function initPlayer(player: Player)
-	if ready[player] == true then
+	if ready[player] == true or initializing[player] == true then
 		return
 	end
+	initializing[player] = true
+	-- Los espacios de dragón dependen del pase ExtraDragonSlots: hay que saber si lo tiene antes de recortar los equipados.
+	MonetizationService.waitForPasses(player)
+
 	local data = DataService.getData(player)
 	if data == nil then
+		initializing[player] = nil
 		return
 	end
 
@@ -285,6 +298,7 @@ local function initPlayer(player: Player)
 	DataService.replicate(player)
 	replicateInventory(player)
 	ready[player] = true
+	initializing[player] = nil
 end
 
 -- Una vez por tick, el nido paga a cada jugador y se marca LastSeen (así sabemos desde cuándo estuvo fuera).
@@ -333,6 +347,8 @@ end
 
 function EggService.start()
 	DataService.onLoaded(initPlayer)
+	-- Una compra puede cambiar los espacios o los huevos gratis: se vuelve a publicar el inventario.
+	MonetizationService.onChanged(replicateInventory)
 	-- Si algún jugador ya cargó antes de conectarnos (por ejemplo, en Studio), se le aplica ahora.
 	for _, player in Players:GetPlayers() do
 		initPlayer(player)
@@ -341,6 +357,7 @@ function EggService.start()
 	Players.PlayerRemoving:Connect(function(player)
 		lastActionAt[player] = nil
 		ready[player] = nil
+		initializing[player] = nil
 	end)
 
 	Remotes.get("Hatch").OnServerEvent:Connect(function(player: Player, eggId: unknown)

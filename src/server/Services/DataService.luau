@@ -25,6 +25,9 @@ local TEMPLATE: Types.PlayerData = {
 	LastSeen = 0,
 	LastDailyDay = 0,
 	DailyStreak = 0,
+	FreeEggs = 0,
+	LuckUntil = 0,
+	StarterPackBought = false,
 	PurchaseHistory = {},
 }
 
@@ -68,6 +71,19 @@ function DataService.replicate(player: Player)
 			coins.Value = data.Coins
 		end
 	end
+end
+
+-- Guarda ya los datos del jugador (normalmente se guardan solos cada tanto). Solo para momentos críticos, como una compra
+-- con Robux. Espera a que termine el guardado. Devuelve false si no pudo.
+function DataService.saveNow(player: Player): boolean
+	local profile = profiles[player]
+	if profile == nil then
+		return false
+	end
+	local ok = pcall(function()
+		profile:Save()
+	end)
+	return ok
 end
 
 -- Corre el callback para cada jugador cuyos datos terminan de cargar.
