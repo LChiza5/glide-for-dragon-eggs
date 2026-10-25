@@ -28,6 +28,15 @@ local values: { [Types.StatName]: Fusion.Value<number> } = {
 	DailyStreak = scope:Value(0),
 	DailyReward = scope:Value(0),
 	DailyResetAt = scope:Value(0),
+	FreeEggs = scope:Value(0),
+	LuckUntil = scope:Value(0),
+	AutoTrainOn = scope:Value(0),
+	OwnsDoublePower = scope:Value(0),
+	OwnsAutoTrain = scope:Value(0),
+	OwnsVip = scope:Value(0),
+	OwnsExtraDragonSlots = scope:Value(0),
+	OwnsDoubleLuck = scope:Value(0),
+	OwnsFastHatch = scope:Value(0),
 }
 
 local StatsController = {}

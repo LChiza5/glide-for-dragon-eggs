@@ -17,6 +17,9 @@ export type RemoteName =
 	| "RebirthResult"
 	| "ClaimDaily"
 	| "DailyResult"
+	| "RequestPurchase"
+	| "PurchaseResult"
+	| "SetAutoTrain"
 
 local NAMES: { RemoteName } = {
 	"Train",
@@ -30,6 +33,9 @@ local NAMES: { RemoteName } = {
 	"RebirthResult",
 	"ClaimDaily",
 	"DailyResult",
+	"RequestPurchase",
+	"PurchaseResult",
+	"SetAutoTrain",
 }
 local FOLDER_NAME = "Remotes"
 local CLIENT_TIMEOUT = 10

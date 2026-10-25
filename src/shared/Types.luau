@@ -15,6 +15,9 @@ export type PlayerData = {
 	LastSeen: number, -- os.time() de la última vez que el nido pagó; sirve para las ganancias sin conexión
 	LastDailyDay: number, -- día UTC (os.time() // 86400) en que reclamó la recompensa diaria por última vez; 0 = nunca
 	DailyStreak: number, -- días seguidos reclamados
+	FreeEggs: number, -- huevos gratis comprados con Robux; se gastan antes que las monedas
+	LuckUntil: number, -- os.time() en que termina la poción de suerte; 0 = sin poción
+	StarterPackBought: boolean, -- el paquete inicial solo se vende una vez
 	PurchaseHistory: { string }, -- PurchaseIds ya entregados, para no entregar una compra dos veces
 }
 
@@ -36,6 +39,15 @@ export type StatName =
 	| "DailyStreak" -- racha actual de días seguidos (0 si la perdió)
 	| "DailyReward" -- monedas que daría el próximo reclamo
 	| "DailyResetAt" -- hora del servidor (segundos) en que cambia el día
+	| "FreeEggs" -- huevos gratis que puede abrir (comprados con Robux)
+	| "LuckUntil" -- hora del servidor (segundos) en que termina la poción de suerte; 0 si no hay
+	| "AutoTrainOn" -- 1 si el entrenamiento automático está encendido
+	| "OwnsDoublePower" -- 1 si tiene el pase, 0 si no (igual para los demás Owns...)
+	| "OwnsAutoTrain"
+	| "OwnsVip"
+	| "OwnsExtraDragonSlots"
+	| "OwnsDoubleLuck"
+	| "OwnsFastHatch"
 
 -- Por qué no se pudo eclosionar.
 export type HatchFailure = "UnknownEgg" | "NotEnoughCoins" | "NoData" | "TooFast"
@@ -52,6 +64,22 @@ export type HatchResult =
 	| {
 		ok: false,
 		reason: HatchFailure,
+	}
+
+-- Por qué no se mostró la ventana de compra.
+export type PurchaseFailure = "NoData" | "TooFast" | "NotForSale" | "AlreadyOwned" | "Unavailable"
+
+-- Respuesta del servidor a un pedido de compra (RemoteEvent "PurchaseResult"). ok = true significa que se mostró
+-- la ventana de Roblox; el resultado de la compra llega después como cambio en los atributos del Player.
+export type PurchaseResult =
+	{
+		ok: true,
+		key: string,
+	}
+	| {
+		ok: false,
+		key: string,
+		reason: PurchaseFailure,
 	}
 
 -- Un puesto de la clasificación por distancia.
