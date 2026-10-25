@@ -17,6 +17,7 @@ local Balance = require(ReplicatedStorage.Shared.Config.Balance)
 local DataService = require(script.Parent.DataService)
 local EggService = require(script.Parent.EggService)
 local LeaderboardService = require(script.Parent.LeaderboardService)
+local MetricsService = require(script.Parent.MetricsService)
 local MonetizationService = require(script.Parent.MonetizationService)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Types = require(ReplicatedStorage.Shared.Types)
@@ -57,6 +58,8 @@ function GlideService.rewardDistance(player: Player, studs: number): Types.Glide
 	data.Coins += coins
 	data.BestDistance = math.max(previousBest, distance)
 	DataService.replicate(player)
+	MetricsService.reach(player, "FirstFlight")
+	MetricsService.coinsGained(player, coins, "Gameplay", "Flight")
 
 	local result: Types.GlideResult = {
 		distance = distance,
