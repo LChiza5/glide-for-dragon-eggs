@@ -8,6 +8,21 @@
 | **Isaac** | Gameplay y mundo | Entrenamiento, lanzamiento y planeo, reinos, dragones que te siguen, nido. Modelos en Blender. |
 | **José** | Interfaz, arte y marketing | HUD, tienda, inventario, índice de dragones, animaciones de UI, icono, miniaturas, trailer. |
 
+## Lugares de Roblox
+
+| Entorno | Experiencia | Place ID | Acceso |
+|---|---|---|---|
+| **Staging** | +1 Glide for Dragon Eggs [Staging] (universo `10772845852`) | `129739159332101` | Privada |
+| **Producción** | +1 Glide for Dragon Eggs (universo `10772845868`) | `77788248882470` | Privada hasta el lanzamiento |
+
+- Las dos experiencias son del Grupo de Roblox **LIJ Devs** (ID `486088653`, <https://www.roblox.com/communities/486088653/LIJ-Devs>).
+  Entrar al grupo es con aprobación manual: cada integrante pide unirse y Luis lo aprueba.
+- Para editar en Team Create hay que ser miembro del grupo con permiso para editar las experiencias del grupo (lo configura Luis).
+- Producción nunca recibe Rojo ni pruebas de Studio: solo se le publica lo que ya se probó en Staging.
+- `servePlaceIds` en `default.project.json` lista solo Staging. Rojo pide confirmación antes de sincronizar con un lugar que no esté
+  en la lista (por ejemplo, tu copia personal): se confirma una vez y sigue.
+- Staging y Producción van en experiencias separadas a propósito: así los datos, pases y productos de prueba no se mezclan con los reales.
+
 ## Dueños por archivo
 
 | Archivo o carpeta | Dueño |
