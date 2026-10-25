@@ -1,10 +1,14 @@
 # Qué le toca a cada quien
 
-Estado al 24 de octubre de 2026. Luis dejó listos los datos, el entrenamiento, el pago del vuelo, los huevos, los dragones, el nido y las
-ganancias sin conexión. Todo está probado en Staging con guardado real. Lo que sigue es de Isaac y de José.
+Estado al 25 de octubre de 2026. Luis dejó listo todo el lado del servidor: datos, entrenamiento, pago del vuelo, huevos, dragones, nido,
+ganancias sin conexión, renacer, recompensa diaria, clasificación, compras con Robux y analítica. Todo está probado en Studio y, lo de
+las Etapas 1 y 2, también en Staging con guardado real. Lo que sigue es de Isaac y de José.
 
-Los contratos exactos (funciones, atributos, eventos) están en [EQUIPO.md](EQUIPO.md), secciones **Contratos entre sistemas**.
-Mientras los Pull Requests no se junten en `main`, esas secciones viven en las ramas `feat/api-etapa1` y `feat/huevos`.
+**Importante:** el servidor ya hace su parte, pero sin mapa ni interfaz casi nada se ve. Por eso lo que falta es de ustedes.
+
+Los contratos exactos (funciones, atributos, eventos) están en [EQUIPO.md](EQUIPO.md) (secciones **Contratos entre sistemas**, Etapas 1 y 2)
+y en [ETAPA3.md](ETAPA3.md) (renacer, recompensa diaria, clasificación y compras). La economía se explica en [BALANCE.md](BALANCE.md).
+Todo está ya en `main`: con `git pull` lo tienen.
 
 ## Primer arranque (Isaac y José)
 
@@ -38,6 +42,13 @@ y `stylua src` y `selene src` antes de abrirlo. Detalle en [CONTRIBUTING.md](../
 - [ ] Huevos en el aire: hablar con Luis si el huevo se abre al instante o se guarda. Hoy, desde el servidor:
       `EggService.hatch(player, "Basic", true)`.
 
+**Etapa 3: reino nuevo y mapa**
+- [ ] Nido: solo los 12 mejores dragones en reposo pagan (`Balance.NEST_SLOTS`). Si el nido del mapa tiene otra cantidad de lugares,
+      avisar a Luis para igualarlo.
+- [ ] Tableros de clasificación en el mapa: leer `ReplicatedStorage.LeaderboardTop` (JSON) y repintar con `.Changed` (ver ETAPA3.md).
+- [ ] Reino 2 (desierto de cañones), obstáculos en vuelo y optimización.
+- [ ] Reinos: cuando existan, avisar a Luis para activar el producto "saltar de reino" (`SkipRealm`), que hoy está bloqueado.
+
 ## José: interfaz, arte y marketing
 
 **Etapa 0 y 1**
@@ -53,11 +64,24 @@ y `stylua src` y `selene src` antes de abrirlo. Detalle en [CONTRIBUTING.md](../
 - [ ] Mostrar las probabilidades de `Eggs.RARITY_WEIGHTS` antes de comprar un huevo con Robux (regla de Roblox).
 - [ ] Avisos de rareza y pantalla de bienvenida con `OfflineCoins` y `OfflineSeconds`.
 
-**Más adelante (Etapa 3 en adelante):** tienda y ofertas, icono, miniaturas, trailer y página del juego.
+**Etapa 3: monetización y retención** (el servidor ya está listo; falta toda la interfaz; detalle en ETAPA3.md)
+- [ ] **Renacer:** botón con `RebirthCost` y `RebirthMultiplier`, que pide con `Remotes.get("Rebirth"):FireServer()` y muestra `RebirthResult`.
+- [ ] **Recompensa diaria:** ventana con el calendario de 7 días (`Daily.REWARDS`), la racha, la cuenta regresiva (`DailyResetAt`) y el botón de reclamar.
+- [ ] **Clasificación:** lista del Top 50 con `LeaderboardTop`.
+- [ ] **Tienda** con `PurchaseController.request(clave)`: los 6 pases y los productos (paquete inicial una sola vez, paquetes de huevos,
+      poción de suerte con cuenta regresiva `LuckUntil`, y "duplicar ganancias sin conexión" dentro de la pantalla de bienvenida).
+- [ ] **Entrenamiento automático:** interruptor con `PurchaseController.setAutoTrain` si tiene el pase (`OwnsAutoTrain`).
+- [ ] **Huevos:** ahora hay tres (Basic, Gilded y Mythic). Mostrar el precio real (`price` por `EggPriceMultiplier`), las probabilidades de
+      cada uno (pesos con su `luck`) y los huevos gratis (`FreeEggs`; el primero es un regalo de bienvenida).
+- [ ] Marca visual para quien tiene VIP (`OwnsVip`).
+
+**Más adelante:** icono, miniaturas, trailer y página del juego.
 
 ## Luis: lo que sigue de su parte
 
-- [ ] Revisar y juntar los Pull Requests abiertos.
-- [ ] Etapa 3: pases y productos con compra segura, renacer, recompensa diaria y clasificaciones.
-- [ ] Balance de probabilidades y economía al cerrar la Etapa 2, con lo que vean jugando los tres.
+- [x] Etapa 3 del lado del servidor: renacer, recompensa diaria, clasificación, pases y productos, y analítica.
+- [ ] Crear en Creator Hub los 6 pases y los 5 productos y pegar sus IDs en `Config/Products.luau`.
+- [ ] Probar las compras y la clasificación con el DataStore real en Staging.
+- [ ] Ajustar el balance (hoy provisional, ver BALANCE.md) con lo que opinen Isaac y José y con el vuelo real.
+- [ ] Revisar los Pull Requests de Isaac y José y juntarlos en `main`.
 - [ ] Publicar en Producción solo lo probado en Staging, con su nota de actualización.
