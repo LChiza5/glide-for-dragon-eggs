@@ -10,7 +10,7 @@ Equipo: **Luis** (sistemas y liderazgo) · **Isaac** (gameplay y mundo) · **Jos
 - **El mapa, los modelos y el diseño de la UI** se editan en Team Create, en el lugar de **Staging**.
 - **El juego es del Grupo de Roblox**, no de una cuenta personal. Solo se publica a **Producción** lo que se probó en Staging.
 
-Detalles en [CONTRIBUTING.md](CONTRIBUTING.md), roles y etapas en [docs/EQUIPO.md](docs/EQUIPO.md), diseño del juego en [docs/DISENO.md](docs/DISENO.md).
+Detalles en [CONTRIBUTING.md](CONTRIBUTING.md), roles y etapas en [docs/EQUIPO.md](docs/EQUIPO.md), diseño del juego en [docs/DISENO.md](docs/DISENO.md). Qué le toca hacer ahora a cada quien: [docs/PENDIENTES.md](docs/PENDIENTES.md).
 
 ## Primera vez (cada integrante)
 
