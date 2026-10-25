@@ -54,6 +54,20 @@ export type HatchResult =
 		reason: HatchFailure,
 	}
 
+-- Un puesto de la clasificación por distancia.
+export type LeaderboardEntry = {
+	rank: number, -- 1 es el mejor
+	userId: number,
+	name: string,
+	distance: number, -- mejor distancia, en studs
+}
+
+-- Lo que guarda ReplicatedStorage.LeaderboardTop (un StringValue) codificado como JSON.
+export type LeaderboardSnapshot = {
+	updatedAt: number, -- os.time() de la última lectura; 0 si todavía no hubo
+	entries: { LeaderboardEntry },
+}
+
 -- Por qué no se pudo renacer.
 export type RebirthFailure = "NoData" | "NotEnoughPower" | "TooFast"
 

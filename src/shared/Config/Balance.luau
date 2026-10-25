@@ -22,6 +22,10 @@ local Balance = {
 	REBIRTH_BONUS = 0.5, -- cada renacer suma +50 % al poder que se gana al entrenar
 	REBIRTH_COOLDOWN = 1, -- segundos mínimos entre dos pedidos de renacer
 
+	-- Clasificación
+	LEADERBOARD_SIZE = 50, -- puestos que se publican
+	LEADERBOARD_REFRESH = 60, -- segundos entre guardar las marcas nuevas y volver a leer el Top
+
 	-- Ganancias sin conexión
 	OFFLINE_MIN_SECONDS = 60, -- ausencias más cortas que esto no pagan
 	OFFLINE_MAX_SECONDS = 8 * 60 * 60, -- tope de horas que se pagan

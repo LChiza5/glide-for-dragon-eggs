@@ -16,6 +16,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Balance = require(ReplicatedStorage.Shared.Config.Balance)
 local DataService = require(script.Parent.DataService)
 local EggService = require(script.Parent.EggService)
+local LeaderboardService = require(script.Parent.LeaderboardService)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Types = require(ReplicatedStorage.Shared.Types)
 
@@ -60,6 +61,9 @@ function GlideService.rewardDistance(player: Player, studs: number): Types.Glide
 		coins = coins,
 		isNewBest = distance > previousBest,
 	}
+	if result.isNewBest then
+		LeaderboardService.submit(player, distance)
+	end
 	Remotes.get("GlideResult"):FireClient(player, result)
 	return result
 end
