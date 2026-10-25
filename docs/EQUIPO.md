@@ -13,10 +13,11 @@
 | Entorno | Experiencia | Place ID | Acceso |
 |---|---|---|---|
 | **Staging** | +1 Glide for Dragon Eggs [Staging] (universo `2378456811`) | `6400227398` | Privada |
-| **Producción** | Pendiente: se crea en Studio con Archivo → Publicar en Roblox como → Crear nueva experiencia | — | Privada hasta el lanzamiento |
+| **Producción** | +1 Glide for Dragon Eggs (universo `10772842623`) | `94503191914261` | Privada hasta el lanzamiento |
 
 - Por ahora las experiencias son de la cuenta Luis_DAV05, porque crear un Grupo de Roblox cuesta 100 Robux. Cuando el juego genere
   Robux se crea el Grupo y se transfieren las experiencias desde Creator Hub; los IDs, los datos y los pases se conservan.
+- Producción nunca recibe Rojo ni pruebas de Studio: solo se le publica lo que ya se probó en Staging.
 - `servePlaceIds` en `default.project.json` lista solo Staging. Rojo pide confirmación antes de sincronizar con un lugar que no esté
   en la lista (por ejemplo, tu copia personal): se confirma una vez y sigue.
 - Staging y Producción van en experiencias separadas a propósito: así los datos, pases y productos de prueba no se mezclan con los reales.
