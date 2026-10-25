@@ -21,6 +21,9 @@ local values: { [Types.StatName]: Fusion.Value<number> } = {
 	DragonSlots = scope:Value(0),
 	OfflineCoins = scope:Value(0),
 	OfflineSeconds = scope:Value(0),
+	Rebirths = scope:Value(0),
+	RebirthMultiplier = scope:Value(1),
+	RebirthCost = scope:Value(0),
 }
 
 local StatsController = {}

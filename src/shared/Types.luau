@@ -27,6 +27,9 @@ export type StatName =
 	| "DragonSlots" -- cuántos dragones puede llevar equipados
 	| "OfflineCoins" -- lo que ganó mientras estaba fuera (0 si no ganó nada); queda fijo toda la sesión
 	| "OfflineSeconds" -- cuánto tiempo estuvo fuera, ya con el tope aplicado
+	| "Rebirths" -- cuántas veces ha renacido
+	| "RebirthMultiplier" -- multiplicador permanente del poder por entrenamiento (1 sin renacer)
+	| "RebirthCost" -- poder de alas que pide el próximo renacer
 
 -- Por qué no se pudo eclosionar.
 export type HatchFailure = "UnknownEgg" | "NotEnoughCoins" | "NoData" | "TooFast"
@@ -43,6 +46,21 @@ export type HatchResult =
 	| {
 		ok: false,
 		reason: HatchFailure,
+	}
+
+-- Por qué no se pudo renacer.
+export type RebirthFailure = "NoData" | "NotEnoughPower" | "TooFast"
+
+-- Respuesta del servidor al pedir renacer (RemoteEvent "RebirthResult").
+export type RebirthResult =
+	{
+		ok: true,
+		rebirths: number, -- cuántos lleva ya, contando este
+		multiplier: number, -- multiplicador nuevo del poder por entrenamiento
+	}
+	| {
+		ok: false,
+		reason: RebirthFailure,
 	}
 
 -- Lo que el servidor le avisa al cliente cuando paga un vuelo (RemoteEvent "GlideResult").

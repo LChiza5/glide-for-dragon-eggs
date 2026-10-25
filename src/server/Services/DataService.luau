@@ -53,6 +53,7 @@ function DataService.replicate(player: Player)
 	player:SetAttribute("Coins", data.Coins)
 	player:SetAttribute("Wins", data.Wins)
 	player:SetAttribute("BestDistance", data.BestDistance)
+	player:SetAttribute("Rebirths", data.Rebirths)
 
 	local leaderstats = player:FindFirstChild("leaderstats")
 	if leaderstats ~= nil then
