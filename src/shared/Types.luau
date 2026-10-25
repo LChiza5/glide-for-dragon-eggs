@@ -13,6 +13,8 @@ export type PlayerData = {
 	Dragons: { [string]: number }, -- id del dragón -> cantidad
 	EquippedDragons: { string }, -- ids de los dragones equipados (se repite el id si lleva dos iguales)
 	LastSeen: number, -- os.time() de la última vez que el nido pagó; sirve para las ganancias sin conexión
+	LastDailyDay: number, -- día UTC (os.time() // 86400) en que reclamó la recompensa diaria por última vez; 0 = nunca
+	DailyStreak: number, -- días seguidos reclamados
 	PurchaseHistory: { string }, -- PurchaseIds ya entregados, para no entregar una compra dos veces
 }
 
@@ -30,6 +32,10 @@ export type StatName =
 	| "Rebirths" -- cuántas veces ha renacido
 	| "RebirthMultiplier" -- multiplicador permanente del poder por entrenamiento (1 sin renacer)
 	| "RebirthCost" -- poder de alas que pide el próximo renacer
+	| "DailyReady" -- 1 si puede reclamar la recompensa diaria hoy, 0 si ya la reclamó
+	| "DailyStreak" -- racha actual de días seguidos (0 si la perdió)
+	| "DailyReward" -- monedas que daría el próximo reclamo
+	| "DailyResetAt" -- hora del servidor (segundos) en que cambia el día
 
 -- Por qué no se pudo eclosionar.
 export type HatchFailure = "UnknownEgg" | "NotEnoughCoins" | "NoData" | "TooFast"
@@ -61,6 +67,22 @@ export type RebirthResult =
 	| {
 		ok: false,
 		reason: RebirthFailure,
+	}
+
+-- Por qué no se pudo reclamar la recompensa diaria.
+export type DailyFailure = "NoData" | "AlreadyClaimed" | "TooFast"
+
+-- Respuesta del servidor al reclamar la recompensa diaria (RemoteEvent "DailyResult").
+export type DailyResult =
+	{
+		ok: true,
+		coins: number, -- monedas recibidas
+		streak: number, -- racha después de reclamar
+		day: number, -- posición en el ciclo de 7 días (1 a 7)
+	}
+	| {
+		ok: false,
+		reason: DailyFailure,
 	}
 
 -- Lo que el servidor le avisa al cliente cuando paga un vuelo (RemoteEvent "GlideResult").
