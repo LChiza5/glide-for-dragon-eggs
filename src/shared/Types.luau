@@ -15,6 +15,7 @@ export type PlayerData = {
 	LastSeen: number, -- os.time() de la última vez que el nido pagó; sirve para las ganancias sin conexión
 	LastDailyDay: number, -- día UTC (os.time() // 86400) en que reclamó la recompensa diaria por última vez; 0 = nunca
 	DailyStreak: number, -- días seguidos reclamados
+	EggsPaid: number, -- huevos pagados con monedas; el precio de los huevos sube con este número
 	FunnelDone: { [string]: boolean }, -- pasos del embudo de analítica que ya se enviaron (una vez por cuenta)
 	FreeEggs: number, -- huevos gratis comprados con Robux; se gastan antes que las monedas
 	LuckUntil: number, -- os.time() en que termina la poción de suerte; 0 = sin poción
@@ -40,7 +41,8 @@ export type StatName =
 	| "DailyStreak" -- racha actual de días seguidos (0 si la perdió)
 	| "DailyReward" -- monedas que daría el próximo reclamo
 	| "DailyResetAt" -- hora del servidor (segundos) en que cambia el día
-	| "FreeEggs" -- huevos gratis que puede abrir (comprados con Robux)
+	| "EggPriceMultiplier" -- por cuánto se multiplica el precio base de los huevos (1 al empezar)
+	| "FreeEggs" -- huevos gratis que puede abrir (de regalo o comprados con Robux)
 	| "LuckUntil" -- hora del servidor (segundos) en que termina la poción de suerte; 0 si no hay
 	| "AutoTrainOn" -- 1 si el entrenamiento automático está encendido
 	| "OwnsDoublePower" -- 1 si tiene el pase, 0 si no (igual para los demás Owns...)

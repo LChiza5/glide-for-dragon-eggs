@@ -87,6 +87,15 @@ function EggService.getGlideMultiplier(player: Player): number
 	return 1 + bonus
 end
 
+-- Por cuánto se multiplica el precio base de los huevos: sube con cada huevo pagado con monedas.
+function EggService.getPriceMultiplier(player: Player): number
+	local data = DataService.getData(player)
+	if data == nil then
+		return 1
+	end
+	return 1 + Balance.EGG_PRICE_STEP * data.EggsPaid
+end
+
 -- Monedas por segundo que paga el nido: los dragones que tiene y no lleva equipados.
 function EggService.getNestRate(player: Player): number
 	local data = DataService.getData(player)
@@ -94,15 +103,23 @@ function EggService.getNestRate(player: Player): number
 		return 0
 	end
 
-	local rate = 0
+	-- Solo pagan los mejores NEST_SLOTS dragones en reposo: coleccionar más no hace crecer la economía sin límite.
+	local resting: { number } = {}
 	for id, owned in data.Dragons do
 		local def = Dragons.byId[id]
 		if def ~= nil then
-			local resting = owned - countOf(data.EquippedDragons, id)
-			if resting > 0 then
-				rate += resting * def.coinsPerSecond
+			for _ = 1, owned - countOf(data.EquippedDragons, id) do
+				table.insert(resting, def.coinsPerSecond)
 			end
 		end
+	end
+	table.sort(resting, function(a, b)
+		return a > b
+	end)
+
+	local rate = 0
+	for index = 1, math.min(#resting, Balance.NEST_SLOTS) do
+		rate += resting[index]
 	end
 	return rate * MonetizationService.getCoinMultiplier(player)
 end
@@ -156,6 +173,7 @@ local function replicateInventory(player: Player)
 	player:SetAttribute("NestRate", EggService.getNestRate(player))
 	player:SetAttribute("DragonSlots", slotLimit(player))
 	player:SetAttribute("FreeEggs", data.FreeEggs)
+	player:SetAttribute("EggPriceMultiplier", EggService.getPriceMultiplier(player))
 	syncCounts(player, "Dragons", data.Dragons)
 	syncCounts(player, "EquippedDragons", equippedCounts)
 end
@@ -181,15 +199,21 @@ function EggService.hatch(player: Player, eggId: string, free: boolean?): Types.
 	-- Sin yields entre comprobar las monedas y cobrarlas: dos pedidos seguidos no pueden gastar las mismas monedas.
 	-- Un huevo gratis comprado con Robux (FreeEggs) se gasta antes que las monedas.
 	local useToken = free ~= true and data.FreeEggs > 0
-	local price = if free == true or useToken then 0 else egg.price
+	local price = if free == true or useToken
+		then 0
+		else math.floor(egg.price * EggService.getPriceMultiplier(player))
 	if data.Coins < price then
 		return { ok = false, reason = "NotEnoughCoins" }
 	end
 
-	local rarity: Eggs.Rarity = EggService.rollRarity(random, MonetizationService.getLuckMultiplier(player))
+	local luck = egg.luck * MonetizationService.getLuckMultiplier(player)
+	local rarity: Eggs.Rarity = EggService.rollRarity(random, luck)
 	local dragon = EggService.pickDragon(random, rarity)
 
 	data.Coins -= price
+	if price > 0 then
+		data.EggsPaid += 1
+	end
 	if useToken then
 		data.FreeEggs -= 1
 	end
