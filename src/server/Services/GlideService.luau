@@ -15,6 +15,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Balance = require(ReplicatedStorage.Shared.Config.Balance)
 local DataService = require(script.Parent.DataService)
+local EggService = require(script.Parent.EggService)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Types = require(ReplicatedStorage.Shared.Types)
 
@@ -42,7 +43,10 @@ function GlideService.rewardDistance(player: Player, studs: number): Types.Glide
 	end
 	lastRewardAt[player] = now
 
-	local maxStuds = math.max(data.WingPower, 1) * Balance.MAX_GLIDE_STUDS_PER_POWER
+	-- Los dragones equipados dan planeo, así que también suben el tope de lo que se puede pagar.
+	local maxStuds = math.max(data.WingPower, 1)
+		* Balance.MAX_GLIDE_STUDS_PER_POWER
+		* EggService.getGlideMultiplier(player)
 	local distance = math.min(studs, maxStuds)
 	local coins = math.floor(distance * Balance.COINS_PER_STUD)
 	local previousBest = data.BestDistance

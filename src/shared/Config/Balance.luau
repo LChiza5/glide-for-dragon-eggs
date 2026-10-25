@@ -10,6 +10,16 @@ local Balance = {
 	COINS_PER_STUD = 0.1, -- monedas por cada stud planeado
 	MAX_GLIDE_STUDS_PER_POWER = 2, -- tope anti-trampas: distancia máxima por punto de poder
 	MIN_GLIDE_INTERVAL = 3, -- segundos mínimos entre dos aterrizajes pagados
+
+	-- Dragones
+	BASE_DRAGON_SLOTS = 3, -- dragones que puede llevar equipados (el pase ExtraDragonSlots suma más)
+	EGG_ACTION_COOLDOWN = 0.25, -- segundos mínimos entre dos pedidos de eclosionar o equipar
+	NEST_TICK = 1, -- cada cuántos segundos el nido paga sus monedas
+
+	-- Ganancias sin conexión
+	OFFLINE_MIN_SECONDS = 60, -- ausencias más cortas que esto no pagan
+	OFFLINE_MAX_SECONDS = 8 * 60 * 60, -- tope de horas que se pagan
+	OFFLINE_EFFICIENCY = 0.5, -- fracción de lo que el nido pagaría conectado (el producto de duplicar la lleva a 1)
 }
 
 return table.freeze(Balance)

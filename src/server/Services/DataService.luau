@@ -21,6 +21,8 @@ local TEMPLATE: Types.PlayerData = {
 	Rebirths = 0,
 	BestDistance = 0,
 	Dragons = {},
+	EquippedDragons = {},
+	LastSeen = 0,
 	PurchaseHistory = {},
 }
 
