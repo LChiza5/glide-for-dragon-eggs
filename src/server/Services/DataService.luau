@@ -23,6 +23,8 @@ local TEMPLATE: Types.PlayerData = {
 	Dragons = {},
 	EquippedDragons = {},
 	LastSeen = 0,
+	LastDailyDay = 0,
+	DailyStreak = 0,
 	PurchaseHistory = {},
 }
 

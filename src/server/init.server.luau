@@ -3,6 +3,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local DailyService = require(script.Services.DailyService)
 local DataService = require(script.Services.DataService)
 local EggService = require(script.Services.EggService)
 local GlideService = require(script.Services.GlideService)
@@ -17,5 +18,6 @@ DataService.start()
 MonetizationService.start()
 TrainingService.start()
 RebirthService.start()
+DailyService.start()
 GlideService.start()
 EggService.start()

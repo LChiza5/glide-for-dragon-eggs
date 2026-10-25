@@ -24,6 +24,10 @@ local values: { [Types.StatName]: Fusion.Value<number> } = {
 	Rebirths = scope:Value(0),
 	RebirthMultiplier = scope:Value(1),
 	RebirthCost = scope:Value(0),
+	DailyReady = scope:Value(0),
+	DailyStreak = scope:Value(0),
+	DailyReward = scope:Value(0),
+	DailyResetAt = scope:Value(0),
 }
 
 local StatsController = {}
