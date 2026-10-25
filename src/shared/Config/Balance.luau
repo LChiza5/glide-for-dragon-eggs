@@ -16,6 +16,12 @@ local Balance = {
 	EGG_ACTION_COOLDOWN = 0.25, -- segundos mínimos entre dos pedidos de eclosionar o equipar
 	NEST_TICK = 1, -- cada cuántos segundos el nido paga sus monedas
 
+	-- Renacer
+	REBIRTH_BASE_POWER = 1_000, -- poder que pide el primer renacer
+	REBIRTH_POWER_GROWTH = 1.6, -- cada renacer pide 1.6 veces el poder del anterior
+	REBIRTH_BONUS = 0.5, -- cada renacer suma +50 % al poder que se gana al entrenar
+	REBIRTH_COOLDOWN = 1, -- segundos mínimos entre dos pedidos de renacer
+
 	-- Ganancias sin conexión
 	OFFLINE_MIN_SECONDS = 60, -- ausencias más cortas que esto no pagan
 	OFFLINE_MAX_SECONDS = 8 * 60 * 60, -- tope de horas que se pagan
