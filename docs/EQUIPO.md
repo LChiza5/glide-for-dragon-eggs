@@ -84,6 +84,52 @@ local result = GlideService.rewardDistance(player, studs) -- Types.GlideResult?
 - La tabla de clasificación (`leaderstats`) ya muestra `Power` y `Coins`; no hay que crearla.
 - Los números para mostrar siempre pasan por `formatNumber` (`src/shared/formatNumber.luau`).
 
+## Contratos entre sistemas (Etapa 2)
+
+Cómo funcionan los huevos, los dragones y el nido. Todo lo decide el servidor (`EggService`); la UI y los modelos solo lo muestran.
+
+**Reglas del sistema**
+
+- Eclosionar cobra monedas (`Eggs.EGGS[id].price`), sortea la rareza con `Eggs.RARITY_WEIGHTS` y elige un dragón de esa rareza al azar.
+- **Equipados** (hasta `DragonSlots`: 3 de base, +3 con el pase): dan planeo y siguen al jugador.
+- **En el nido** (los que tiene y no están equipados): pagan `coinsPerSecond` cada uno, también sin conexión.
+- Sin conexión paga el 50 %, con un mínimo de 60 s y un máximo de 8 h. Todos los números están en `src/shared/Config/Balance.luau` y `Dragons.luau`.
+
+### Para Isaac: modelos, dragones que siguen y nido
+
+1. **Modelos:** un `Model` por dragón, con el mismo nombre que su `id` en `src/shared/Config/Dragons.luau`
+   (15 ids: `PebbleDrake`, `StormGlider`, `SunfireSovereign`…), dentro de `ReplicatedStorage.DragonModels` en Team Create.
+   Propuesta: en `ReplicatedStorage` para que José también los use en el inventario con un `ViewportFrame`. Si prefieres otro lugar, avisa.
+2. **Dragones que siguen al jugador:** el servidor publica dentro del `Player` la carpeta `EquippedDragons`, con un `IntValue` por dragón
+   (nombre = id, valor = cuántos). Crear el modelo cuando aparece o sube el valor y quitarlo cuando baja o desaparece
+   (`ChildAdded`, `ChildRemoved` y `Changed`). Si lleva dos iguales, el valor es 2.
+3. **Planeo:** el atributo `GlideMultiplier` del `Player` vale 1 sin dragones y sube con cada equipado (1.25 = +25 %).
+   El servidor ya sube el tope de lo que paga el vuelo en esa proporción (`poder × 2 × GlideMultiplier`); el planeo del mapa tiene que poder llegar hasta ahí.
+4. **Nido:** lo que descansa es la carpeta `Dragons` menos la `EquippedDragons`, id por id. `NestRate` es lo que paga por segundo.
+5. **Huevos en el aire:** desde el servidor, `EggService.hatch(player, "Basic", true)` abre un huevo gratis (sin cobrar) y devuelve un `Types.HatchResult`.
+   Esa llamada no avisa al cliente: para la animación de José, mandar el resultado con `Remotes.get("HatchResult"):FireClient(player, result)`.
+   Pendiente de hablar entre Luis e Isaac: si el huevo del aire se abre al instante o se guarda para después.
+
+### Para José: eclosión, inventario, índice y bienvenida
+
+- **`InventoryController`** (`src/client/Controllers/InventoryController.luau`), todo con estados de Fusion:
+  - `InventoryController.owned()` y `.equipped()` devuelven `Fusion.Value<{ [string]: number }>` (id → cantidad). Usarlos con `use(...)` dentro de un `Computed`.
+  - `InventoryController.hatch("Basic")`, `.equip(id)` y `.unequip(id)` piden la acción; el servidor decide.
+  - `InventoryController.onHatchResult(callback)` recibe un `Types.HatchResult`: `{ ok = true, dragonId, rarity, isNew, coinsSpent }`
+    o `{ ok = false, reason }`, donde `reason` es `NotEnoughCoins` ("no te alcanzan las monedas"), `TooFast` (ignorar), `UnknownEgg` o `NoData`.
+- **Datos para pintar:** `Eggs.EGGS` (nombre y precio), `Eggs.RARITY_WEIGHTS` (probabilidades, hay que mostrarlas antes de comprar un huevo con Robux)
+  y `Dragons.LIST` (índice: `name`, `rarity`, `glideBonus`, `coinsPerSecond`, en orden de la más común a la más rara).
+- **Stats nuevos** en `StatsController.get(...)`: `GlideMultiplier`, `NestRate`, `DragonSlots` (para "2/3 equipados"), `OfflineCoins` y `OfflineSeconds`.
+- **Pantalla de bienvenida:** si `OfflineCoins` es mayor que 0 al entrar, mostrar "Mientras no estabas, tu nido ganó X monedas" con `OfflineSeconds`.
+  Estos dos valores no cambian en toda la sesión, así que basta leerlos una vez al cargar.
+- **Reglas para los botones:** no se puede equipar si ya están equipadas todas las copias que tiene ni si `equipped` ya llenó `DragonSlots`.
+  Se puede deshabilitar el botón con esos datos, pero el servidor igual lo valida.
+
+### Pendiente de Luis (Etapa 3)
+
+- Que `MonetizationService.getLuckMultiplier` (pase DoubleLuck y poción) y `getExtraDragonSlots` (pase ExtraDragonSlots) devuelvan sus valores reales, y que una compra llame a `EggService.refresh(player)`.
+- El producto "duplicar ganancias offline": darle otra vez las mismas monedas que muestra `OfflineCoins`.
+
 ## Metas para saber si vamos bien
 
 - Vuelve al día siguiente (D1): 20 % o más

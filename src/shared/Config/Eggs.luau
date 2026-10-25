@@ -21,8 +21,24 @@ for _, entry in RARITY_WEIGHTS do
 	table.freeze(entry)
 end
 
+export type EggDef = {
+	id: string,
+	name: string,
+	price: number, -- monedas
+}
+
+local EGG_LIST: { EggDef } = {
+	{ id = "Basic", name = "Dragon Egg", price = 100 },
+}
+
+local EGGS: { [string]: EggDef } = {}
+for _, egg in EGG_LIST do
+	EGGS[egg.id] = table.freeze(egg)
+end
+
 local Eggs = {
 	RARITY_WEIGHTS = table.freeze(RARITY_WEIGHTS),
+	EGGS = table.freeze(EGGS), -- por id; EggService.hatch(player, "Basic")
 }
 
 return table.freeze(Eggs)

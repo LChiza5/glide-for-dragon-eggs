@@ -5,9 +5,24 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
-export type RemoteName = "Train" | "GlideLanded" | "GlideResult"
+export type RemoteName =
+	"Train"
+	| "GlideLanded"
+	| "GlideResult"
+	| "Hatch"
+	| "HatchResult"
+	| "EquipDragon"
+	| "UnequipDragon"
 
-local NAMES: { RemoteName } = { "Train", "GlideLanded", "GlideResult" }
+local NAMES: { RemoteName } = {
+	"Train",
+	"GlideLanded",
+	"GlideResult",
+	"Hatch",
+	"HatchResult",
+	"EquipDragon",
+	"UnequipDragon",
+}
 local FOLDER_NAME = "Remotes"
 local CLIENT_TIMEOUT = 10
 

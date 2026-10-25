@@ -55,7 +55,7 @@ selene src
 ```
 src/
 ├── shared/   → ReplicatedStorage.Shared       (lo usan servidor y cliente)
-│   ├── Config/      Balance, Eggs, Products
+│   ├── Config/      Balance, Dragons, Eggs, Products
 │   ├── Remotes.luau
 │   ├── Types.luau
 │   └── formatNumber.luau
@@ -64,7 +64,7 @@ src/
 │   └── Services/    Data, Training, Glide, Egg, Monetization
 └── client/   → StarterPlayerScripts.Client    (solo cliente)
     ├── init.client.luau
-    ├── Controllers/ Stats, Training, Glide
+    ├── Controllers/ Stats, Inventory, Training, Glide
     └── UI/          Theme, Hud
 ```
 
