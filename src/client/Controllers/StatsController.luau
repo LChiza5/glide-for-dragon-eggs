@@ -28,6 +28,7 @@ local values: { [Types.StatName]: Fusion.Value<number> } = {
 	DailyStreak = scope:Value(0),
 	DailyReward = scope:Value(0),
 	DailyResetAt = scope:Value(0),
+	EggPriceMultiplier = scope:Value(1),
 	FreeEggs = scope:Value(0),
 	LuckUntil = scope:Value(0),
 	AutoTrainOn = scope:Value(0),

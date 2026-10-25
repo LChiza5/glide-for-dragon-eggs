@@ -25,10 +25,15 @@ export type EggDef = {
 	id: string,
 	name: string,
 	price: number, -- monedas
+	luck: number, -- multiplica los pesos de las rarezas que no son la más común (1 = los de RARITY_WEIGHTS tal cual)
 }
 
+-- De más barato a más caro. Los más caros dan mejores probabilidades de rarezas altas.
+-- El precio real sube con los huevos ya pagados (Balance.EGG_PRICE_STEP); la UI muestra price x el atributo EggPriceMultiplier.
 local EGG_LIST: { EggDef } = {
-	{ id = "Basic", name = "Dragon Egg", price = 100 },
+	{ id = "Basic", name = "Dragon Egg", price = 100, luck = 1 },
+	{ id = "Gilded", name = "Gilded Egg", price = 4000, luck = 2 },
+	{ id = "Mythic", name = "Mythic Egg", price = 100000, luck = 4 },
 }
 
 local EGGS: { [string]: EggDef } = {}
