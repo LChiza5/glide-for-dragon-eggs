@@ -1,10 +1,13 @@
 # Qué le toca a cada quien
 
-Estado al 25 de octubre de 2026. Luis dejó listo todo el lado del servidor: datos, entrenamiento, pago del vuelo, huevos, dragones, nido,
-ganancias sin conexión, renacer, recompensa diaria, clasificación, compras con Robux y analítica. Todo está probado en Studio y, lo de
-las Etapas 1 y 2, también en Staging con guardado real. Lo que sigue es de Isaac y de José.
+Estado al 27 de octubre de 2026. Luis dejó listo todo el lado del servidor (datos, entrenamiento, vuelo, huevos, dragones, nido,
+ganancias sin conexión, renacer, recompensa diaria, clasificación, compras con Robux y analítica) y además **la base jugable**:
+mapa gris, vuelo con medición en el servidor, máquinas de entrenamiento y dragones de bloques que siguen al jugador y se ven en el nido.
+Ya se puede jugar de punta a punta; lo que falta es que **se vea bien** (Isaac) y **la interfaz** (José).
 
-**Importante:** el servidor ya hace su parte, pero sin mapa ni interfaz casi nada se ve. Por eso lo que falta es de ustedes.
+> **Isaac: tu lista cambió.** Luis hizo la base de tu parte para poder probar el juego. No la rehagas: tu trabajo ahora es
+> convertirla en el juego bonito (arte, modelos, animaciones y el feel del planeo). Todo lo que hizo Luis está explicado en
+> [BASE-JUGABLE.md](BASE-JUGABLE.md).
 
 Los contratos exactos (funciones, atributos, eventos) están en [EQUIPO.md](EQUIPO.md) (secciones **Contratos entre sistemas**, Etapas 1 y 2)
 y en [ETAPA3.md](ETAPA3.md) (renacer, recompensa diaria, clasificación y compras). La economía se explica en [BALANCE.md](BALANCE.md).
@@ -26,34 +29,37 @@ Todo está ya en `main`: con `git pull` lo tienen.
 Reglas de siempre: una rama por tarea (`feat/...`), commits cortos en español, Pull Request hacia `main` con otro integrante revisando,
 y `stylua src` y `selene src` antes de abrirlo. Detalle en [CONTRIBUTING.md](../CONTRIBUTING.md).
 
-## Isaac: gameplay y mundo
+## Isaac: arte, modelos y feel del juego
 
-**Etapa 1: el bucle principal**
-- [ ] Mapa en bloques en Staging: spawn, máquinas de entrenamiento, acantilado y primer reino con marcas de distancia.
-- [ ] Máquinas que entrenan: `TrainingController` (ProximityPrompt o tocar la máquina) y animación del personaje.
-- [ ] Lanzamiento y planeo en `GlideController` y `GlideService`: detectar el despegue y medir la distancia **en el servidor**
-      con la posición del personaje, y llamar a `GlideService.rewardDistance(player, studs)`. Nunca usar una distancia que mande el cliente.
+**Ya está hecho por Luis (no rehacer):** mapa gris en Staging, `GlideController` y la medición del vuelo en `GlideService`,
+`TrainingController` con las máquinas, `DragonController` (dragones que siguen y nido de 12) y los 15 dragones de bloques.
+Los dragones y el mapa de bloques son **moldes feos a propósito**: sirven para probar, no para publicar.
 
-**Etapa 2: dragones**
-- [ ] Un modelo por dragón en `ReplicatedStorage.DragonModels`, con el mismo nombre que su `id` de `src/shared/Config/Dragons.luau` (15 ids).
-- [ ] Que los dragones equipados sigan al jugador: leer la carpeta `EquippedDragons` del `Player`.
-- [ ] Nido: mostrar los dragones que descansan (carpeta `Dragons` menos `EquippedDragons`).
-- [ ] Planeo: que el atributo `GlideMultiplier` pueda llevar el planeo hasta `poder × 2 × GlideMultiplier` studs.
-- [ ] Huevos en el aire: hablar con Luis si el huevo se abre al instante o se guarda. Hoy, desde el servidor:
-      `EggService.hatch(player, "Basic", true)`.
+**Etapa 1 y 2: que se vea y se sienta bien**
+- [ ] **Valle verde:** reemplazar el mapa gris (`Workspace.Map` en Staging) por el arte real. Mantener las etiquetas, que son el
+      contrato con el código: `TrainingMachine` (con su ProximityPrompt), `LaunchPad`, `ReturnPoint` y `NestSlot` (atributo `Slot` 1 a 12).
+      Cuando el mapa sea el tuyo, quítale el atributo `Greybox` para que el script del mapa gris no lo toque.
+- [ ] **Los 15 dragones en Blender:** reemplazar los de bloques en `ReplicatedStorage.DragonModels`. Mismo nombre que su `id` de
+      `Config/Dragons.luau`, mirando hacia -Z, con el pivote en el cuerpo y **sin** el atributo `Greybox`. Puedes cambiarlos uno por uno.
+- [ ] **Animaciones:** personaje al entrenar (`TrainingController.isHolding()`), pose y alas al planear
+      (`GlideController.isGliding()`, `onGlideStarted`, `onGlideEnded`), y dragones volando y descansando en el nido.
+- [ ] **Feel del planeo:** ajustar la sección **Vuelo** de `Config/Balance.luau` (velocidad, giro, impulso, caída) y la cámara
+      durante el vuelo en `GlideController`. Si subes `GLIDE_MAX_SPEED` o `GLIDE_LAUNCH_BOOST`, avisa a Luis: el servidor los usa
+      para detectar trampas.
+- [ ] **Huevos en el aire (diseño):** dónde aparecen durante el vuelo y cómo se recogen. Hablar con Luis antes de programarlo;
+      del lado del servidor se entrega con `EggService.hatch(player, "Basic", true)`.
 
 **Etapa 3: reino nuevo y mapa**
-- [ ] Nido: solo los 12 mejores dragones en reposo pagan (`Balance.NEST_SLOTS`). Si el nido del mapa tiene otra cantidad de lugares,
-      avisar a Luis para igualarlo.
 - [ ] Tableros de clasificación en el mapa: leer `ReplicatedStorage.LeaderboardTop` (JSON) y repintar con `.Changed` (ver ETAPA3.md).
-- [ ] Reino 2 (desierto de cañones), obstáculos en vuelo y optimización.
-- [ ] Reinos: cuando existan, avisar a Luis para activar el producto "saltar de reino" (`SkipRealm`), que hoy está bloqueado.
+- [ ] Reino 2 (desierto de cañones) y obstáculos en vuelo. Cuando exista, avisar a Luis para activar el producto `SkipRealm`.
+- [ ] Optimización del mapa real (cantidad de partes, streaming) antes de publicar.
 
 ## José: interfaz, arte y marketing
 
 **Etapa 0 y 1**
 - [ ] Dirección de arte, paleta y bocetos (HUD, tienda, inventario). Los colores y espacios van en `src/client/UI/Theme.luau`.
 - [ ] HUD: el "+1" que salta (`TrainingController.onTrained`), barra de distancia durante el vuelo y sonidos.
+      El vuelo ya existe: `GlideController.isGliding()`, `GlideController.distance()`, `onGlideStarted(fn)` y `onGlideEnded(fn)`.
 - [ ] Pantalla de resultado al aterrizar: escuchar `Remotes.get("GlideResult")` (`distance`, `coins`, `isNewBest`).
 - [ ] Mostrar `BestDistance` con `StatsController.get("BestDistance")`.
 
@@ -62,6 +68,9 @@ y `stylua src` y `selene src` antes de abrirlo. Detalle en [CONTRIBUTING.md](../
 - [ ] Inventario con `InventoryController.owned()` y `equipped()`, y botones de equipar y desequipar.
 - [ ] Índice de dragones con `Dragons.LIST` (nombre, rareza, planeo y monedas).
 - [ ] Mostrar las probabilidades de `Eggs.RARITY_WEIGHTS` antes de comprar un huevo con Robux (regla de Roblox).
+      Los pesos cambiaron (63 / 26 / 8 / 2,3 / 0,7): leerlos siempre de `Config/Eggs.luau`, nunca escribirlos a mano en la UI.
+- [ ] **Aviso de legendario** para todo el servidor ("Fulano sacó un Sunfire Sovereign"): `InventoryController.onLegendaryHatched(fn)`
+      con `displayName` y `dragonId` (el nombre bonito está en `Dragons.byId`).
 - [ ] Avisos de rareza y pantalla de bienvenida con `OfflineCoins` y `OfflineSeconds`.
 
 **Etapa 3: monetización y retención** (el servidor ya está listo; falta toda la interfaz; detalle en ETAPA3.md)
@@ -80,8 +89,10 @@ y `stylua src` y `selene src` antes de abrirlo. Detalle en [CONTRIBUTING.md](../
 ## Luis: lo que sigue de su parte
 
 - [x] Etapa 3 del lado del servidor: renacer, recompensa diaria, clasificación, pases y productos, y analítica.
+- [x] Base jugable: mapa gris, vuelo con medición en el servidor, máquinas y dragones de bloques (ver BASE-JUGABLE.md).
+- [x] Gacha: simulador con percentiles y pesos de rareza ajustados (primer legendario ~91 min de mediana), y aviso de legendario.
 - [ ] Crear en Creator Hub los 6 pases y los 5 productos y pegar sus IDs en `Config/Products.luau`.
 - [ ] Probar las compras y la clasificación con el DataStore real en Staging.
-- [ ] Ajustar el balance (hoy provisional, ver BALANCE.md) con lo que opinen Isaac y José y con el vuelo real.
+- [ ] Volver a correr el simulador con el vuelo real medido en Staging (el simulador supone 30 studs por segundo).
 - [ ] Revisar los Pull Requests de Isaac y José y juntarlos en `main`.
 - [ ] Publicar en Producción solo lo probado en Staging, con su nota de actualización.
