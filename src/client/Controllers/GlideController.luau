@@ -1,7 +1,7 @@
 --!strict
 -- Dueño: Luis (base) · Isaac (feel, animaciones y cámara).
--- Al dejar una plataforma "LaunchPad" en el aire, abre las alas: un impulso hacia arriba y luego planeo hacia donde mira
--- donde lo dirige el jugador. Más WingPower y GlideMultiplier = planeo más largo. Los números están en Config/Balance (sección Vuelo).
+-- Al dejar una plataforma "LaunchPad" en el aire, abre las alas: un impulso hacia arriba y luego planeo recto, girando
+-- solo hacia donde lo dirige el jugador. Más WingPower y GlideMultiplier = planeo más largo. Los números están en Config/Balance (sección Vuelo).
 -- El cliente solo mueve al personaje; el servidor (GlideService) mide el vuelo y paga.
 --
 -- Para la UI de José: GlideController.isGliding(), GlideController.distance() (studs desde el despegue, solo para mostrar),
