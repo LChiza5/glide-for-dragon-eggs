@@ -26,7 +26,8 @@ local LIST: { Entry } = {
 	{ id = "EternalVoidwing", rarity = "Legendary", color = Color3.fromRGB(90, 20, 140) },
 }
 
-local SCALE: { [string]: number } = { Common = 1, Uncommon = 1.15, Rare = 1.3, Epic = 1.5, Legendary = 1.8 }
+local SCALE: { [string]: number } =
+	{ Common = 0.5, Uncommon = 0.55, Rare = 0.6, Epic = 0.7, Legendary = 0.85 }
 
 local function part(
 	model: Model,

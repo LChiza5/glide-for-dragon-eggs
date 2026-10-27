@@ -18,9 +18,10 @@ local Dragons = require(ReplicatedStorage.Shared.Config.Dragons)
 local NEST_TAG = "NestSlot"
 local WAIT_TIMEOUT = 10
 local FOLLOW_SPEED = 8 -- qué tan rápido alcanzan su lugar (más = más pegados)
-local FOLLOW_BEHIND = 6 -- studs detrás del personaje
-local FOLLOW_SPACING = 4 -- studs entre dragones
-local FOLLOW_HEIGHT = 3
+local FOLLOW_SIDE = 4 -- studs a cada lado del personaje (el primero a la izquierda, el segundo a la derecha…)
+local FOLLOW_SPACING = 3 -- studs extra hacia afuera y hacia atrás por cada par
+local FOLLOW_BEHIND = 1
+local FOLLOW_HEIGHT = 2.5
 local BOB_HEIGHT = 0.5
 local BOB_SPEED = 2
 
@@ -201,11 +202,12 @@ local function follow(dt: number)
 		if list == nil or root == nil or not root:IsA("BasePart") then
 			continue
 		end
-		local count = #list
 		for _, follower in list do
-			-- En fila detrás del personaje, abiertos en abanico.
-			local side = (follower.index - (count + 1) / 2) * FOLLOW_SPACING
-			local behind = FOLLOW_BEHIND + math.abs(side) * 0.5
+			-- A los lados del personaje, alternando izquierda y derecha, para no tapar la cámara.
+			local pair = (follower.index - 1) // 2
+			local direction = if follower.index % 2 == 1 then -1 else 1
+			local side = direction * (FOLLOW_SIDE + pair * FOLLOW_SPACING)
+			local behind = FOLLOW_BEHIND + pair * FOLLOW_SPACING
 			local bob = math.sin(now * BOB_SPEED + follower.index) * BOB_HEIGHT
 			local goal = root.CFrame * CFrame.new(side, FOLLOW_HEIGHT + bob, behind)
 			local pivot = follower.model:GetPivot()
