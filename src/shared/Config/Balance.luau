@@ -11,6 +11,25 @@ local Balance = {
 	MAX_GLIDE_STUDS_PER_POWER = 2, -- tope anti-trampas: distancia máxima por punto de poder
 	MIN_GLIDE_INTERVAL = 3, -- segundos mínimos entre dos aterrizajes pagados
 
+	-- Vuelo: cómo se siente (GlideController, en el cliente). Isaac ajusta el feel aquí.
+	GLIDE_EFFICIENCY = 0.9, -- fracción del tope de distancia que logra un planeo recto, sin hacer nada
+	GLIDE_TARGET_SECONDS = 14, -- lo que dura, más o menos, un vuelo largo (la velocidad se ajusta a esto)
+	GLIDE_MIN_SPEED = 30, -- velocidad horizontal mínima del planeo (studs por segundo)
+	GLIDE_MAX_SPEED = 160, -- velocidad horizontal máxima del planeo (el servidor la hace cumplir)
+	GLIDE_TURN_RATE = 2, -- radianes por segundo que gira cuando el jugador lo dirige
+	GLIDE_LAUNCH_BOOST = 40, -- impulso hacia arriba al despegar (studs por segundo)
+	GLIDE_LAUNCH_BOOST_SECONDS = 0.5,
+	GLIDE_MIN_SINK = 4, -- caída mínima por segundo mientras planea
+	GLIDE_MAX_SINK = 120, -- caída máxima por segundo (al terminarse el planeo baja en picada)
+
+	-- Vuelo: anti-trampas (GlideService, en el servidor). El servidor mide el despegue y el aterrizaje.
+	GLIDE_CHECK_INTERVAL = 0.1, -- segundos entre dos revisiones de la posición de cada jugador en vuelo
+	GLIDE_SPEED_TOLERANCE = 1.5, -- margen sobre GLIDE_MAX_SPEED y GLIDE_LAUNCH_BOOST antes de llamarlo teletransporte
+	GLIDE_SPEED_MARGIN = 12, -- studs extra que se perdonan en cada revisión (lag)
+	MAX_FLIGHT_SECONDS = 180, -- un vuelo más largo que esto se cancela sin pago
+	MIN_FLIGHT_SECONDS = 0.3, -- un "aterrizaje" antes de esto no cuenta
+	GLIDE_RETURN_DELAY = 3, -- segundos tras aterrizar antes de volver al inicio
+
 	-- Dragones
 	BASE_DRAGON_SLOTS = 3, -- dragones que puede llevar equipados (el pase ExtraDragonSlots suma más)
 	EGG_ACTION_COOLDOWN = 0.25, -- segundos mínimos entre dos pedidos de eclosionar o equipar
