@@ -57,6 +57,9 @@ Las claves y su efecto (los IDs se pegan en `Config/Products.luau`; mientras est
 
 - Tres huevos en `Config/Eggs.luau`: `Basic`, `Gilded` y `Mythic`. El precio real es `price x EggPriceMultiplier`.
 - El jugador nuevo empieza con 1 huevo gratis (`FreeEggs = 1`).
+- **Aviso de legendario:** cuando alguien del servidor saca un legendario, todos los clientes reciben `Remotes.get("LegendaryHatched")`
+  con `Types.LegendaryAnnouncement` (`userId`, `displayName`, `dragonId`, `eggId`). En la UI: `InventoryController.onLegendaryHatched(fn)`.
+  Los huevos son tiradas puras, sin garantías: un legendario en la primera tirada es posible y es parte del diseño.
 - El nido solo paga con los 12 mejores dragones en reposo (`Balance.NEST_SLOTS`). Detalle y números en [BALANCE.md](BALANCE.md).
 
 ## Pendiente de Luis (a mano en Roblox)

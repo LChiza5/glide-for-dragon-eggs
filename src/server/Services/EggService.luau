@@ -225,6 +225,15 @@ function EggService.hatch(player: Player, eggId: string, free: boolean?): Types.
 	MetricsService.reach(player, "FirstEgg")
 	MetricsService.coinsSpent(player, price, "Shop", egg.id)
 	MetricsService.event(player, "Hatch", 1, { rarity = rarity, dragon = dragon.id, price = price })
+	if rarity == "Legendary" then
+		local announcement: Types.LegendaryAnnouncement = {
+			userId = player.UserId,
+			displayName = player.DisplayName,
+			dragonId = dragon.id,
+			eggId = egg.id,
+		}
+		Remotes.get("LegendaryHatched"):FireAllClients(announcement)
+	end
 	return { ok = true, dragonId = dragon.id, rarity = rarity, isNew = before == nil, coinsSpent = price }
 end
 

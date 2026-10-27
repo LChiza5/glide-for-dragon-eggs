@@ -20,6 +20,7 @@ export type RemoteName =
 	| "RequestPurchase"
 	| "PurchaseResult"
 	| "SetAutoTrain"
+	| "LegendaryHatched"
 
 local NAMES: { RemoteName } = {
 	"Train",
@@ -36,6 +37,7 @@ local NAMES: { RemoteName } = {
 	"RequestPurchase",
 	"PurchaseResult",
 	"SetAutoTrain",
+	"LegendaryHatched",
 }
 local FOLDER_NAME = "Remotes"
 local CLIENT_TIMEOUT = 10
