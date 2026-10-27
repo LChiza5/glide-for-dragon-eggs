@@ -3,6 +3,7 @@
 // con supuestos sobre el vuelo que hay que revisar cuando el mapa de Isaac exista.
 //
 // Uso:  node tools/balance/simulate.mjs [horas]
+// Los huevos son tiradas independientes, sin garantías: por eso el informe da percentiles (p10, p50, p90) y no solo la mediana.
 
 import fs from "node:fs";
 
@@ -30,6 +31,7 @@ const DRAGONS = [
 
 // Valores de prueba por línea de comandos, sin tocar los archivos de Config:
 //   --set NEST_SLOTS=12 --set COINS_PER_STUD=0.15 --eggs "Basic:50:1,Gilded:1500:2,Mythic:40000:4"
+//   --weights "Common:60,Uncommon:25,Rare:10,Epic:4,Legendary:1"   (pesos de rareza, de la más común a la más rara)
 const args = process.argv.slice(2);
 const positional = [];
 for (let i = 0; i < args.length; i++) {
@@ -39,6 +41,12 @@ for (let i = 0; i < args.length; i++) {
 	} else if (args[i] === "--cps") {
 		const factor = Number(args[++i]); // prueba: todos los dragones pagan este factor de lo actual
 		for (const d of DRAGONS) d.cps *= factor;
+	} else if (args[i] === "--weights") {
+		WEIGHTS.length = 0;
+		for (const part of args[++i].split(",")) {
+			const [rarity, weight] = part.split(":");
+			WEIGHTS.push({ rarity, weight: Number(weight) });
+		}
 	} else if (args[i] === "--eggs") {
 		EGGS.length = 0;
 		for (const part of args[++i].split(",")) {
@@ -50,6 +58,7 @@ for (let i = 0; i < args.length; i++) {
 	}
 }
 
+const EARLY_MINUTES = 12; // "primera sesión": qué rarezas ya tiene el jugador a esta altura
 const MAX_EGGS = 2000; // tope de seguridad del simulador
 const SAVE_SECONDS = 90; // el jugador simulado ahorra para el huevo que podría pagar con esta cantidad de segundos de ingresos
 const EGGS_BY_PRICE = [...EGGS].sort((a, b) => a.price - b.price);
@@ -82,6 +91,12 @@ function rollRarity(random, luck) {
 const median = (xs) => {
 	const s = xs.filter((x) => x !== null).sort((a, b) => a - b);
 	return s.length ? s[Math.floor(s.length / 2)] : null;
+};
+// Percentil sobre todos los jugadores: quien nunca llegó cuenta como "más tarde que todos" (null = nunca).
+const percentile = (xs, p) => {
+	const s = xs.map((x) => x ?? Infinity).sort((a, b) => a - b);
+	const v = s[Math.min(s.length - 1, Math.floor((s.length * p) / 100))];
+	return v === Infinity ? null : v;
 };
 const fmtTime = (s) => {
 	if (s === null || s === undefined) return "   nunca";
@@ -133,6 +148,17 @@ function simulate(profile, seconds, seed) {
 		nestCache = resting.slice(0, B.NEST_SLOTS ?? Infinity).reduce((a, b) => a + b, 0);
 	};
 
+	const hatch = (luck, t) => {
+		const rarity = rollRarity(random, luck);
+		const pool = DRAGONS_BY_RARITY[rarity];
+		const dragon = pool[Math.floor(random() * pool.length)];
+		owned[dragon.id] = (owned[dragon.id] ?? 0) + 1;
+		reequip();
+		mark(`primer ${rarity}`, t);
+	};
+	// Huevo de regalo al empezar (FreeEggs = 1 en DataService): un Basic que no cuenta para el precio.
+	hatch(EGGS_BY_PRICE[0].luck, 0);
+
 	let mode = "train";
 	let left = profile.trainChunk;
 	let pending = 0;
@@ -177,14 +203,9 @@ function simulate(profile, seconds, seed) {
 			if (!affordable) break;
 			coins -= price;
 			spent += price;
-			const rarity = rollRarity(random, affordable.luck);
-			const pool = DRAGONS_BY_RARITY[rarity];
-			const dragon = pool[Math.floor(random() * pool.length)];
-			owned[dragon.id] = (owned[dragon.id] ?? 0) + 1;
 			eggs++;
-			reequip();
+			hatch(affordable.luck, t);
 			mark(`huevo ${eggs}`, t);
-			mark(`primer ${rarity}`, t);
 		}
 
 		// Seguridad: si la economía se dispara, se corta aquí (y eso ya es un resultado: hay inflación).
@@ -199,6 +220,9 @@ function simulate(profile, seconds, seed) {
 			mark(`renacer ${rebirths}`, t);
 		}
 
+		if (t === EARLY_MINUTES * 60) {
+			samples.early = Object.fromEntries(WEIGHTS.map((w) => [w.rarity, DRAGONS_BY_RARITY[w.rarity].some((d) => owned[d.id])]));
+		}
 		for (const minute of [5, 10, 30, 60, 120]) {
 			if (t === minute * 60) {
 				samples[minute] = { power, rebirths, eggs, nest: nestRate(), glide: glideMult(), dragons: Object.values(owned).reduce((a, b) => a + b, 0) };
@@ -216,6 +240,7 @@ const PROFILES = {
 };
 const RUNS = 200;
 
+console.log(`Pesos: ${WEIGHTS.map((w) => `${w.rarity} ${w.weight}`).join(", ")} · EGG_PRICE_STEP ${B.EGG_PRICE_STEP}`);
 console.log(`Configuración leída: ${EGGS.length} huevo(s), ${DRAGONS.length} dragones, precio base ${EGGS[0]?.price}, ${hours} h simuladas, ${RUNS} jugadores por perfil.\n`);
 
 for (const [name, profile] of Object.entries(PROFILES)) {
@@ -223,12 +248,16 @@ for (const [name, profile] of Object.entries(PROFILES)) {
 	console.log(`=== Jugador ${name} (${profile.clicks} clics/s, logra ${Math.round(profile.realized * 100)} % del tope de distancia) ===`);
 
 	const keys = ["huevo 1", "huevo 5", "huevo 10", "huevo 25", "huevo 50", "huevo 100", "huevo 500", `huevo ${MAX_EGGS}`, "primer Uncommon", "primer Rare", "primer Epic", "primer Legendary", "renacer 1", "renacer 2", "renacer 3", "renacer 5"];
-	console.log("Hito (mediana de los jugadores)            tiempo   ¿cuántos lo logran?");
+	console.log("Hito                                  p10 (suertudo)  p50 (mediana)  p90 (sin suerte)  ¿cuántos lo logran?");
 	for (const key of keys) {
 		const times = results.map((r) => r.milestones[key] ?? null);
 		const reached = times.filter((x) => x !== null).length;
-		console.log(`  ${key.padEnd(30)} ${fmtTime(median(times))}   ${Math.round((reached / RUNS) * 100)} %`);
+		const cols = [10, 50, 90].map((p) => fmtTime(percentile(times, p)).padStart(14)).join("  ");
+		console.log(`  ${key.padEnd(30)} ${cols}   ${String(Math.round((reached / RUNS) * 100)).padStart(5)} %`);
 	}
+	const early = results.map((r) => r.samples.early).filter(Boolean);
+	const share = WEIGHTS.map((w) => `${w.rarity} ${Math.round((early.filter((e) => e[w.rarity]).length / Math.max(early.length, 1)) * 100)} %`);
+	console.log(`A los ${EARLY_MINUTES} min tienen al menos uno: ${share.join(" · ")}`);
 
 	console.log("Estado a los…        poder  renacimientos  huevos  dragones  nido (monedas/s)  planeo");
 	for (const minute of [5, 10, 30, 60, 120]) {
