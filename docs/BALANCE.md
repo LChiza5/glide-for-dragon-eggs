@@ -7,7 +7,13 @@ Los resultados dependen de supuestos sobre el vuelo (ver abajo), así que son **
 node tools/balance/simulate.mjs 3          # 3 horas simuladas, 200 jugadores por perfil
 node tools/balance/simulate.mjs 3 --set NEST_SLOTS=8 --set EGG_PRICE_STEP=0.07   # probar valores sin tocar Config
 node tools/balance/simulate.mjs 3 --eggs "Basic:100:1,Gilded:4000:2" --cps 0.5   # huevos propios, dragones que pagan la mitad
+node tools/balance/simulate.mjs 3 --weights "Common:63,Uncommon:26,Rare:8,Epic:2.3,Legendary:0.7"   # probar pesos de rareza
 ```
+
+Los huevos son tiradas independientes, **sin garantías ni "pity"**: a un jugador con suerte le puede salir un legendario en la primera.
+Por eso el simulador da tres columnas por hito: **p10** (el 10 % con más suerte llega antes), **p50** (la mediana) y **p90** (el 10 % con
+menos suerte llega después). También dice qué rarezas tiene cada jugador a los 12 minutos (la primera sesión) y cuenta el huevo
+de regalo (un Basic).
 
 ## Qué se encontró
 
