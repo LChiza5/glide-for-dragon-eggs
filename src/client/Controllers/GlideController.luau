@@ -1,7 +1,7 @@
 --!strict
 -- Dueño: Luis (base) · Isaac (feel, animaciones y cámara).
 -- Al dejar una plataforma "LaunchPad" en el aire, abre las alas: un impulso hacia arriba y luego planeo hacia donde mira
--- la cámara. Más WingPower y GlideMultiplier = planeo más largo. Los números están en Config/Balance (sección Vuelo).
+-- donde lo dirige el jugador. Más WingPower y GlideMultiplier = planeo más largo. Los números están en Config/Balance (sección Vuelo).
 -- El cliente solo mueve al personaje; el servidor (GlideService) mide el vuelo y paga.
 --
 -- Para la UI de José: GlideController.isGliding(), GlideController.distance() (studs desde el despegue, solo para mostrar),
@@ -165,12 +165,10 @@ local function update(glide: Glide, dt: number, now: number)
 		return
 	end
 
-	local camera = Workspace.CurrentCamera
-	if camera ~= nil then
-		local look = flat(camera.CFrame.LookVector)
-		if look.Magnitude > 0.01 then
-			glide.direction = turnToward(glide.direction, look.Unit, Balance.GLIDE_TURN_RATE * dt)
-		end
+	-- Gira solo si el jugador mueve el personaje (WASD o stick, relativo a la cámara); si no, sigue recto.
+	local move = flat(glide.humanoid.MoveDirection)
+	if move.Magnitude > 0.1 then
+		glide.direction = turnToward(glide.direction, move.Unit, Balance.GLIDE_TURN_RATE * dt)
 	end
 
 	-- Baja lo justo para tocar el suelo cuando completa la distancia que le da su poder.
