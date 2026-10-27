@@ -17,7 +17,7 @@ for (const m of read("Balance.luau").matchAll(/^\s*([A-Z_0-9]+) = ([0-9_.\s*+\/-
 }
 
 const eggsSrc = read("Eggs.luau");
-const WEIGHTS = [...eggsSrc.matchAll(/rarity = "(\w+)", weight = (\d+)/g)].map((m) => ({ rarity: m[1], weight: Number(m[2]) }));
+const WEIGHTS = [...eggsSrc.matchAll(/rarity = "(\w+)", weight = ([\d.]+)/g)].map((m) => ({ rarity: m[1], weight: Number(m[2]) }));
 const EGGS = [...eggsSrc.matchAll(/id = "(\w+)", name = "[^"]+", price = (\d+)(?:, luck = ([\d.]+))?/g)].map((m) => ({
 	id: m[1],
 	price: Number(m[2]),

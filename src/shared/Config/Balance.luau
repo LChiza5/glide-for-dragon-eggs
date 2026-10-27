@@ -35,7 +35,7 @@ local Balance = {
 	EGG_ACTION_COOLDOWN = 0.25, -- segundos mínimos entre dos pedidos de eclosionar o equipar
 	NEST_TICK = 1, -- cada cuántos segundos el nido paga sus monedas
 	NEST_SLOTS = 12, -- cuántos dragones en reposo pagan (los mejores); el resto solo se colecciona
-	EGG_PRICE_STEP = 0.05, -- cada huevo pagado con monedas sube 5 % el precio de todos (el precio base es el de Config/Eggs)
+	EGG_PRICE_STEP = 0.06, -- cada huevo pagado con monedas sube 6 % el precio de todos (el precio base es el de Config/Eggs)
 
 	-- Renacer
 	REBIRTH_BASE_POWER = 1_000, -- poder que pide el primer renacer
