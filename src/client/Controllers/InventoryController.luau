@@ -17,6 +17,7 @@ local scope = Fusion.scoped(Fusion)
 local owned = scope:Value({} :: Counts)
 local equipped = scope:Value({} :: Counts)
 local hatchCallbacks: { (Types.HatchResult) -> () } = {}
+local legendaryCallbacks: { (Types.LegendaryAnnouncement) -> () } = {}
 
 local InventoryController = {}
 
@@ -98,6 +99,11 @@ function InventoryController.onHatchResult(callback: (Types.HatchResult) -> ())
 	table.insert(hatchCallbacks, callback)
 end
 
+-- Cuando cualquier jugador del servidor (también el propio) saca un legendario. Para el aviso en pantalla de José.
+function InventoryController.onLegendaryHatched(callback: (Types.LegendaryAnnouncement) -> ())
+	table.insert(legendaryCallbacks, callback)
+end
+
 function InventoryController.start()
 	local player = Players.LocalPlayer
 	track(player, "Dragons", owned)
@@ -106,6 +112,11 @@ function InventoryController.start()
 	Remotes.get("HatchResult").OnClientEvent:Connect(function(result: Types.HatchResult)
 		for _, callback in hatchCallbacks do
 			task.spawn(callback, result)
+		end
+	end)
+	Remotes.get("LegendaryHatched").OnClientEvent:Connect(function(announcement: Types.LegendaryAnnouncement)
+		for _, callback in legendaryCallbacks do
+			task.spawn(callback, announcement)
 		end
 	end)
 end

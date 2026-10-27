@@ -130,6 +130,14 @@ export type DailyResult =
 		reason: DailyFailure,
 	}
 
+-- Aviso a todo el servidor cuando alguien saca un legendario (RemoteEvent "LegendaryHatched", a todos los clientes).
+export type LegendaryAnnouncement = {
+	userId: number,
+	displayName: string,
+	dragonId: string, -- id de Config/Dragons; el nombre bonito está en Dragons.byId
+	eggId: string,
+}
+
 -- Lo que el servidor le avisa al cliente cuando paga un vuelo (RemoteEvent "GlideResult").
 export type GlideResult = {
 	distance: number, -- studs pagados, ya recortados al máximo permitido
