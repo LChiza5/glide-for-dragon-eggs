@@ -91,6 +91,9 @@ Los dragones y el mapa de bloques son **moldes feos a propósito**: sirven para 
 - [x] Etapa 3 del lado del servidor: renacer, recompensa diaria, clasificación, pases y productos, y analítica.
 - [x] Base jugable: mapa gris, vuelo con medición en el servidor, máquinas y dragones de bloques (ver BASE-JUGABLE.md).
 - [x] Gacha: simulador con percentiles y pesos de rareza ajustados (primer legendario ~91 min de mediana), y aviso de legendario.
+- [ ] **Siguiente sesión:** pasar el código nuevo de `main` al Staging. Hoy el Staging tiene el mapa gris y los dragones de bloques,
+      pero sus scripts son viejos: las máquinas no suben el poder, no hay planeo y los dragones no siguen al jugador. Después probar
+      ahí la E en las máquinas, un vuelo y el nido. (En la copia local el vuelo y los dragones ya funcionaron.)
 - [ ] Crear en Creator Hub los 6 pases y los 5 productos y pegar sus IDs en `Config/Products.luau`.
 - [ ] Probar las compras y la clasificación con el DataStore real en Staging.
 - [ ] Volver a correr el simulador con el vuelo real medido en Staging (el simulador supone 30 studs por segundo).
