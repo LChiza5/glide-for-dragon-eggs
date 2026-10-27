@@ -31,13 +31,15 @@
 | `src/server/Services/TrainingService.luau` | Luis |
 | `src/server/Services/EggService.luau` | Luis |
 | `src/server/Services/MonetizationService.luau` | Luis |
-| `src/server/Services/GlideService.luau` | Isaac (medición) · Luis (pago) |
+| `src/server/Services/GlideService.luau` | Luis (medición y pago) |
 | `src/client/Controllers/StatsController.luau` | Luis |
-| `src/client/Controllers/TrainingController.luau` | Isaac |
-| `src/client/Controllers/GlideController.luau` | Isaac |
+| `src/client/Controllers/TrainingController.luau` | Luis (base) · Isaac (animación) |
+| `src/client/Controllers/GlideController.luau` | Luis (base) · Isaac (feel, animación y cámara) |
+| `src/client/Controllers/DragonController.luau` | Luis (base) · Isaac (modelos y animaciones) |
 | `src/client/UI/` | José |
 | `src/shared/Config/` | Luis (José e Isaac proponen cambios) |
-| Mapa y modelos (Team Create) | Isaac |
+| Mapa y modelos (Team Create) | Luis (mapa gris y dragones de bloques) · Isaac (arte real) |
+| `tools/studio/` (scripts que construyen el mapa gris y los dragones) | Luis |
 | Icono, miniaturas, página del juego | José |
 
 ## Etapas
