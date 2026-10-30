@@ -41,6 +41,7 @@ local FILES = {
 	"client/Controllers/PurchaseController.luau",
 	"client/Controllers/StatsController.luau",
 	"client/Controllers/TrainingController.luau",
+	"client/UI/GlideDistanceBar.luau",
 	"client/UI/Hud.luau",
 	"client/UI/Theme.luau",
 }
