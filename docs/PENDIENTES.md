@@ -7,6 +7,12 @@ El 30 de octubre se pasó el código al Staging y se vistió el mapa: ya hay **V
 y **barra de distancia** durante el vuelo. Ya se puede probar con gente; lo que falta es **pulir el arte y el feel** (Isaac)
 y **el resto de la interfaz** (José).
 
+> **Lo más urgente es lo visual:** el juego ya funciona, pero todavía se ve feo. Cada pendiente de Isaac y José también está
+> como **Issue en GitHub** (se ven en GitKraken, sección **ISSUES** del panel izquierdo), con su lista de casillas y estas
+> etiquetas: `isaac`, `jose`, `visual`, `prioridad` y `etapa-3`. Empiecen por los que dicen `prioridad`.
+> Al terminar uno, ciérrenlo desde su Pull Request (escribiendo "Closes #número" en la descripción).
+> Lista: <https://github.com/LChiza5/glide-for-dragon-eggs/issues>
+
 > **Isaac: tu lista cambió.** Luis hizo la base de tu parte para poder probar el juego. No la rehagas: tu trabajo ahora es
 > convertirla en el juego bonito (arte, modelos, animaciones y el feel del planeo). Todo lo que hizo Luis está explicado en
 > [BASE-JUGABLE.md](BASE-JUGABLE.md).
