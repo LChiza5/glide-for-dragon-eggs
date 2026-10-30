@@ -94,6 +94,8 @@ Los dragones y el mapa de bloques son **moldes feos a propósito**: sirven para 
 - [ ] **Siguiente sesión:** pasar el código nuevo de `main` al Staging. Hoy el Staging tiene el mapa gris y los dragones de bloques,
       pero sus scripts son viejos: las máquinas no suben el poder, no hay planeo y los dragones no siguen al jugador. Después probar
       ahí la E en las máquinas, un vuelo y el nido. (En la copia local el vuelo y los dragones ya funcionaron.)
+      Ya está el script `tools/studio/syncFromLocalServer.luau`: en `src`, `python -m http.server 8765 --bind 127.0.0.1`
+      y pegar el script en la barra de comandos de Studio (o run_code) con el Staging abierto. Falta correrlo y probar.
 - [ ] Crear en Creator Hub los 6 pases y los 5 productos y pegar sus IDs en `Config/Products.luau`.
 - [ ] Probar las compras y la clasificación con el DataStore real en Staging.
 - [ ] Volver a correr el simulador con el vuelo real medido en Staging (el simulador supone 30 studs por segundo).
