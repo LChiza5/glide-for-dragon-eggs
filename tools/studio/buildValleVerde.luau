@@ -14,7 +14,7 @@ assert(map ~= nil, "Falta Workspace.Map: corre primero buildGreybox.luau")
 
 local GRASS = Color3.fromRGB(108, 186, 84)
 local GRASS_DARK = Color3.fromRGB(78, 150, 64)
-local STONE = Color3.fromRGB(226, 212, 176)
+local STONE = Color3.fromRGB(196, 178, 140)
 local WOOD = Color3.fromRGB(128, 86, 50)
 local WOOD_DARK = Color3.fromRGB(92, 60, 36)
 local STRAW = Color3.fromRGB(222, 190, 118)
@@ -160,7 +160,7 @@ local function restyle(path: { string }, colorValue: Color3, material: Enum.Mate
 	end
 end
 restyle({ "Ground" }, GRASS, Enum.Material.Grass)
-restyle({ "Start", "Plaza" }, STONE, Enum.Material.Cobblestone)
+restyle({ "Start", "Plaza" }, STONE, Enum.Material.Pebble)
 restyle({ "Cliff", "Cliff" }, Color3.fromRGB(140, 128, 112), Enum.Material.Rock)
 restyle({ "Cliff", "Ramp" }, WOOD, Enum.Material.WoodPlanks)
 

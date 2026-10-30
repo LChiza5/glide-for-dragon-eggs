@@ -42,7 +42,7 @@ Cómo funcionan: [BASE-JUGABLE.md](BASE-JUGABLE.md).
 **Etapa 1 y 2: que se vea y se sienta bien**
 - [x] **Valle verde (primera versión, Luis):** pasto, luz y cielo, árboles, rocas, flores, máquinas con forma de pesas, nido de ramas
       y carteles de madera. El mapa ya no tiene el atributo `Greybox`.
-- [ ] **Retoques del Valle verde:** colinas con Terrain, río o lago, más detalle en el acantilado y la rampa, la plaza menos blanca,
+- [ ] **Retoques del Valle verde:** colinas con Terrain, río o lago, más detalle en el acantilado, la rampa y la plaza,
       y lo que quieras cambiar. Mantener las etiquetas, que son el contrato con el código: `TrainingMachine` (con su ProximityPrompt),
       `LaunchPad`, `ReturnPoint` y `NestSlot` (atributo `Slot` 1 a 12). Si vuelves a correr `buildValleVerde.luau`, rehace solo
       `Map.Decor` y los modelos `Deco` de las máquinas.
