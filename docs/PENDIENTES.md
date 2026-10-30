@@ -8,7 +8,7 @@ y **barra de distancia** durante el vuelo. Ya se puede probar con gente; lo que 
 y **el resto de la interfaz** (José).
 
 > **Lo más urgente es lo visual:** el juego ya funciona, pero todavía se ve feo. Cada pendiente de Isaac y José también está
-> como **Issue en GitHub** (se ven en GitKraken, sección **ISSUES** del panel izquierdo), con su lista de casillas y estas
+> como **Issue en GitHub** (se ven en GitKraken, sección **ISSUES** del panel izquierdo; la primera vez hay que elegir **GitHub**), con su lista de casillas y estas
 > etiquetas: `isaac`, `jose`, `visual`, `prioridad` y `etapa-3`. Empiecen por los que dicen `prioridad`.
 > Al terminar uno, ciérrenlo desde su Pull Request (escribiendo "Closes #número" en la descripción).
 > Lista: <https://github.com/LChiza5/glide-for-dragon-eggs/issues>
