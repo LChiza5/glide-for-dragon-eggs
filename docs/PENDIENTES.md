@@ -1,9 +1,11 @@
 # Qué le toca a cada quien
 
-Estado al 27 de octubre de 2026. Luis dejó listo todo el lado del servidor (datos, entrenamiento, vuelo, huevos, dragones, nido,
+Estado al 30 de octubre de 2026. Luis dejó listo todo el lado del servidor (datos, entrenamiento, vuelo, huevos, dragones, nido,
 ganancias sin conexión, renacer, recompensa diaria, clasificación, compras con Robux y analítica) y además **la base jugable**:
-mapa gris, vuelo con medición en el servidor, máquinas de entrenamiento y dragones de bloques que siguen al jugador y se ven en el nido.
-Ya se puede jugar de punta a punta; lo que falta es que **se vea bien** (Isaac) y **la interfaz** (José).
+vuelo con medición en el servidor, máquinas de entrenamiento y dragones que siguen al jugador y se ven en el nido.
+El 30 de octubre se pasó el código al Staging y se vistió el mapa: ya hay **Valle verde**, **15 dragones estilo caricatura**
+y **barra de distancia** durante el vuelo. Ya se puede probar con gente; lo que falta es **pulir el arte y el feel** (Isaac)
+y **el resto de la interfaz** (José).
 
 > **Isaac: tu lista cambió.** Luis hizo la base de tu parte para poder probar el juego. No la rehagas: tu trabajo ahora es
 > convertirla en el juego bonito (arte, modelos, animaciones y el feel del planeo). Todo lo que hizo Luis está explicado en
@@ -31,16 +33,22 @@ y `stylua src` y `selene src` antes de abrirlo. Detalle en [CONTRIBUTING.md](../
 
 ## Isaac: arte, modelos y feel del juego
 
-**Ya está hecho por Luis (no rehacer):** mapa gris en Staging, `GlideController` y la medición del vuelo en `GlideService`,
-`TrainingController` con las máquinas, `DragonController` (dragones que siguen y nido de 12) y los 15 dragones de bloques.
-Los dragones y el mapa de bloques son **moldes feos a propósito**: sirven para probar, no para publicar.
+**Ya está hecho por Luis (no rehacer):** `GlideController` y la medición del vuelo en `GlideService`,
+`TrainingController` con las máquinas, `DragonController` (dragones que siguen y nido de 12), la primera versión del
+**Valle verde** (`tools/studio/buildValleVerde.luau`) y los **15 dragones estilo caricatura** (`tools/studio/buildCartoonDragons.luau`).
+Están hechos con piezas de Studio: son buenos para probar con gente, pero tu arte de Blender puede reemplazarlos cuando quieras.
+Cómo funcionan: [BASE-JUGABLE.md](BASE-JUGABLE.md).
 
 **Etapa 1 y 2: que se vea y se sienta bien**
-- [ ] **Valle verde:** reemplazar el mapa gris (`Workspace.Map` en Staging) por el arte real. Mantener las etiquetas, que son el
-      contrato con el código: `TrainingMachine` (con su ProximityPrompt), `LaunchPad`, `ReturnPoint` y `NestSlot` (atributo `Slot` 1 a 12).
-      Cuando el mapa sea el tuyo, quítale el atributo `Greybox` para que el script del mapa gris no lo toque.
-- [ ] **Los 15 dragones en Blender:** reemplazar los de bloques en `ReplicatedStorage.DragonModels`. Mismo nombre que su `id` de
-      `Config/Dragons.luau`, mirando hacia -Z, con el pivote en el cuerpo y **sin** el atributo `Greybox`. Puedes cambiarlos uno por uno.
+- [x] **Valle verde (primera versión, Luis):** pasto, luz y cielo, árboles, rocas, flores, máquinas con forma de pesas, nido de ramas
+      y carteles de madera. El mapa ya no tiene el atributo `Greybox`.
+- [ ] **Retoques del Valle verde:** colinas con Terrain, río o lago, más detalle en el acantilado y la rampa, la plaza menos blanca,
+      y lo que quieras cambiar. Mantener las etiquetas, que son el contrato con el código: `TrainingMachine` (con su ProximityPrompt),
+      `LaunchPad`, `ReturnPoint` y `NestSlot` (atributo `Slot` 1 a 12). Si vuelves a correr `buildValleVerde.luau`, rehace solo
+      `Map.Decor` y los modelos `Deco` de las máquinas.
+- [x] **15 dragones estilo caricatura (Luis):** en `ReplicatedStorage.DragonModels`, más detalles y brillo según la rareza.
+- [ ] **(Opcional) Dragones de Blender:** si haces uno mejor, ponlo con el mismo nombre que su `id` de `Config/Dragons.luau`,
+      mirando hacia -Z, con el pivote en el cuerpo y **sin** los atributos `Greybox` ni `Cartoon` (así ningún script lo pisa).
 - [ ] **Animaciones:** personaje al entrenar (`TrainingController.isHolding()`), pose y alas al planear
       (`GlideController.isGliding()`, `onGlideStarted`, `onGlideEnded`), y dragones volando y descansando en el nido.
 - [ ] **Feel del planeo:** ajustar la sección **Vuelo** de `Config/Balance.luau` (velocidad, giro, impulso, caída) y la cámara
@@ -58,7 +66,9 @@ Los dragones y el mapa de bloques son **moldes feos a propósito**: sirven para 
 
 **Etapa 0 y 1**
 - [ ] Dirección de arte, paleta y bocetos (HUD, tienda, inventario). Los colores y espacios van en `src/client/UI/Theme.luau`.
-- [ ] HUD: el "+1" que salta (`TrainingController.onTrained`), barra de distancia durante el vuelo y sonidos.
+- [x] **Barra de distancia durante el vuelo (base de Luis):** `src/client/UI/GlideDistanceBar.luau`. Usa solo colores del Theme;
+      cámbiale el estilo como quieras.
+- [ ] HUD: el "+1" que salta (`TrainingController.onTrained`) y sonidos.
       El vuelo ya existe: `GlideController.isGliding()`, `GlideController.distance()`, `onGlideStarted(fn)` y `onGlideEnded(fn)`.
 - [ ] Pantalla de resultado al aterrizar: escuchar `Remotes.get("GlideResult")` (`distance`, `coins`, `isNewBest`).
 - [ ] Mostrar `BestDistance` con `StatsController.get("BestDistance")`.
@@ -91,11 +101,10 @@ Los dragones y el mapa de bloques son **moldes feos a propósito**: sirven para 
 - [x] Etapa 3 del lado del servidor: renacer, recompensa diaria, clasificación, pases y productos, y analítica.
 - [x] Base jugable: mapa gris, vuelo con medición en el servidor, máquinas y dragones de bloques (ver BASE-JUGABLE.md).
 - [x] Gacha: simulador con percentiles y pesos de rareza ajustados (primer legendario ~91 min de mediana), y aviso de legendario.
-- [ ] **Siguiente sesión:** pasar el código nuevo de `main` al Staging. Hoy el Staging tiene el mapa gris y los dragones de bloques,
-      pero sus scripts son viejos: las máquinas no suben el poder, no hay planeo y los dragones no siguen al jugador. Después probar
-      ahí la E en las máquinas, un vuelo y el nido. (En la copia local el vuelo y los dragones ya funcionaron.)
-      Ya está el script `tools/studio/syncFromLocalServer.luau`: en `src`, `python -m http.server 8765 --bind 127.0.0.1`
-      y pegar el script en la barra de comandos de Studio (o run_code) con el Staging abierto. Falta correrlo y probar.
+- [x] Pasar el código de `main` al Staging (con `tools/studio/syncFromLocalServer.luau`, sin Rojo) y probar ahí: el servidor sube el
+      poder al entrenar, el vuelo paga y regresa al inicio, la barra de distancia sale y los dragones siguen al jugador y llenan el nido.
+- [ ] **Probar la E con el teclado de verdad** en una máquina del Staging (con la ventana del juego activa). El aviso aparece y el
+      servidor sube el poder, pero la prueba automática no pudo apretar la tecla.
 - [ ] Crear en Creator Hub los 6 pases y los 5 productos y pegar sus IDs en `Config/Products.luau`.
 - [ ] Probar las compras y la clasificación con el DataStore real en Staging.
 - [ ] Volver a correr el simulador con el vuelo real medido en Staging (el simulador supone 30 studs por segundo).
